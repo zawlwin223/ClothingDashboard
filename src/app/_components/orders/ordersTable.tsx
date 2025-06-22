@@ -1,7 +1,8 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import React from 'react'
+import { fetchOrders } from '@/app/_hook/fetchOrders'
 
 interface OrderItem {
   id: number
@@ -26,6 +27,7 @@ interface Customer {
 }
 
 interface Order {
+  id: string
   customer: Customer
   items: OrderItem[]
   totalPrice: string
@@ -34,17 +36,7 @@ interface Order {
 export default function OrdersTable() {
   const [expanded, setExpanded] = useState<string | null>(null)
 
-  const { data, isLoading, isError } = useQuery<Record<string, Order>>({
-    queryKey: ['orders'],
-    queryFn: async () => {
-      const databaseUrl = process.env.NEXT_PUBLIC_DATABASE_URL
-      console.log(databaseUrl)
-      if (!databaseUrl) throw new Error('DATABASE_URL is not defined')
-      const response = await fetch(databaseUrl)
-      if (!response.ok) throw new Error('Failed to fetch')
-      return response.json()
-    },
-  })
+  const { data, isLoading, isError } = fetchOrders()
 
   if (isLoading) return <div className="p-4">Loading...</div>
   if (isError)
@@ -64,53 +56,60 @@ export default function OrdersTable() {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(data!).map(([key, order]) => (
-            <>
-              <tr key={key}>
-                <td className="px-4 py-2 border">{order.customer.fullName}</td>
-                <td className="px-4 py-2 border">{order.customer.email}</td>
-                <td className="px-4 py-2 border">{order.customer.city}</td>
-                <td className="px-4 py-2 border">{order.totalPrice}</td>
-                <td className="px-4 py-2 border">
-                  <button
-                    onClick={() =>
-                      setExpanded((prev) => (prev === key ? null : key))
-                    }
-                    className="bg-blue-500 text-white px-3 py-1 rounded">
-                    {expanded === key ? 'Hide' : 'Check'}
-                  </button>
-                </td>
-              </tr>
-
-              {expanded === key && (
-                // console.log()
-                <tr>
-                  <td colSpan={5} className="bg-gray-50 border px-4 py-2">
-                    <div className="space-y-4">
-                      {order.items.map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-4">
-                          <img
-                            src={item.image.url}
-                            alt="product"
-                            className="w-16 h-16 object-cover border"
-                          />
-                          <div>
-                            <p className="font-semibold">
-                              {item.title ?? 'Unnamed Product'}
-                            </p>
-                            <p>
-                              Size: {item.size} | Quantity: {item.quantity} |
-                              Price: ${item.price}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+          {Object.entries(data!).map(([key, order]) => {
+            const typedOrder = order as Order
+            return (
+              <React.Fragment key={key}>
+                <tr key={`${key}-order`}>
+                  <td className="px-4 py-2 border">
+                    {typedOrder.customer.fullName}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    {typedOrder.customer.email}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    {typedOrder.customer.city}
+                  </td>
+                  <td className="px-4 py-2 border">{typedOrder.totalPrice}</td>
+                  <td className="px-4 py-2 border">
+                    <button
+                      onClick={() =>
+                        setExpanded((prev) => (prev === key ? null : key))
+                      }
+                      className="bg-blue-500 text-white px-3 py-1 rounded">
+                      {expanded === key ? 'Hide' : 'Check'}
+                    </button>
                   </td>
                 </tr>
-              )}
-            </>
-          ))}
+                {expanded === key && (
+                  <tr key={`${key}-item`}>
+                    <td colSpan={5} className="bg-gray-50 border px-4 py-2">
+                      <div className="space-y-4">
+                        {typedOrder.items.map((item, idx) => (
+                          <div key={idx} className="flex items-center gap-4">
+                            <img
+                              src={item.image.url}
+                              alt="product"
+                              className="w-16 h-16 object-cover border"
+                            />
+                            <div>
+                              <p className="font-semibold">
+                                {item.title ?? 'Unnamed Product'}
+                              </p>
+                              <p>
+                                Size: {item.size} | Quantity: {item.quantity} |
+                                Price: ${item.price}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            )
+          })}
         </tbody>
       </table>
     </div>

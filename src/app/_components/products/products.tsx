@@ -4,27 +4,16 @@ import Image from 'next/image'
 import Card from '@/app/_components/products/card'
 import LinkButton from '../button'
 import { useQuery } from '@tanstack/react-query'
-import { fetchAllProducts } from '@/app/_utils/fetchProducts'
-// import { fetchOrders } from '@/app/_utils/firebase'
+import { fetchDataFromFB } from '@/app/_utils/firebase'
 
-// async function test() {
-//   console.log('it works')
-//   const response = await fetch(
-//     'https://fashioncommerce-6a4f7-default-rtdb.firebaseio.com/orders.json'
-//   )
-//   const data = await response.json()
-//   console.log(data)
-// }
-// test()
 export default function FetchedProducts() {
-  // const orders = await fetchOrders()
   const {
     data: products = [],
     isLoading,
     error,
   } = useQuery({
     queryKey: ['products'],
-    queryFn: fetchAllProducts,
+    queryFn: fetchDataFromFB,
   })
 
   if (isLoading) {
@@ -36,19 +25,19 @@ export default function FetchedProducts() {
       <Card key={product.id}>
         <Image
           src={
-            typeof product.image === 'object'
-              ? product.image.url
-              : product.image
+            typeof product.image === 'object' && product.image !== null
+              ? String((product.image as { url: unknown }).url)
+              : String(product.image)
           }
-          alt={product.title}
+          alt={String(product.title)}
           width={100}
           height={100}
           className="object-contain"
         />
         <div className="">
-          <h2 className="text-xl font-bold">{product.title}</h2>
+          <h2 className="text-xl font-bold">{String(product.title)}</h2>
 
-          <p className="text-lg font-semibold">${product.price}</p>
+          <p className="text-lg font-semibold">${String(product.price)}</p>
         </div>
         <div className="flex ">
           <LinkButton id={product.id} type="edit">
@@ -57,8 +46,10 @@ export default function FetchedProducts() {
           <LinkButton
             id={product.id}
             image_id={
-              typeof product.image === 'object'
-                ? product.image.public_id
+              typeof product.image === 'object' &&
+              product.image !== null &&
+              'public_id' in product.image
+                ? (product.image as { public_id: string }).public_id
                 : undefined
             }
             type="delete">
