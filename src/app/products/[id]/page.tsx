@@ -33,5 +33,9 @@ export default async function ProductEditPage({ params }: PageProps) {
     image: data?.image || '',
   }
 
-  return <ProductForm initialProduct={initialProduct}></ProductForm>
+  return (
+    <Providers>
+      <ProductForm initialProduct={initialProduct}></ProductForm>
+    </Providers>
+  )
 }

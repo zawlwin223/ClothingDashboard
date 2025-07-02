@@ -11,23 +11,18 @@ import {
 import { redirect } from 'next/navigation'
 
 interface FormState {
-  message: string
-  errors: Partial<Record<keyof ProductInput, string[]>>
+  // message: string
+  // errors: Partial<Record<keyof ProductInput, string[]>>
   values?: Partial<ProductInput>
 }
 
-export async function createProduct(
-  prevState: FormState,
-  formData: FormData
-): Promise<FormState> {
+export async function createProduct(formData: FormData): Promise<FormState> {
   const { message, errors, values } = validateForm(formData)
 
+  console.log('Form validation result:', { message, errors, values })
+
   if (message === 'error') {
-    return {
-      message: 'error',
-      errors,
-      values,
-    }
+    throw new Error(JSON.stringify({ validationError: errors }))
   }
 
   const imageResult = await saveImageFile(values?.image as File)
@@ -52,37 +47,23 @@ export async function createProduct(
     }
 
     await sendDataToFB(newProduct)
+  }
 
-    return {
-      message: 'success',
-      errors: {},
-      values, // image must be File or undefined
-    }
-  } else {
-    return {
-      message: 'error',
-      errors: { image: [(imageResult as any).error || 'Image upload failed'] },
-      values,
-    }
+  return {
+    values,
   }
 }
 
 export async function updateProduct(
   firebaseid: string,
   imageId: string,
-  prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
   const { message, errors, values } = validateForm(formData)
 
   if (message === 'error') {
-    return {
-      message: 'error',
-      errors,
-      values,
-    }
+    throw new Error(JSON.stringify(errors))
   }
-
   const newProduct = {
     ...values,
     title: values?.title ?? '',
@@ -104,6 +85,9 @@ export async function updateProduct(
       firebaseId: firebaseid,
       updatedData: newProduct,
     })
+    return {
+      values,
+    }
   }
 
   if (values?.image && values.image instanceof File) {
@@ -127,29 +111,11 @@ export async function updateProduct(
         firebaseId: firebaseid,
         updatedData: newProduct,
       })
-
-      return {
-        message: 'success',
-        errors: {},
-        values, // image must be File or undefined
-      }
-    } else {
-      return {
-        message: 'error',
-        errors: {
-          image: [
-            (imageResult as { error?: string }).error || 'Image upload failed',
-          ],
-        },
-        values,
-      }
     }
   }
 
   return {
-    message: 'success',
-    errors: {},
-    values, // image must be File or undefined
+    values,
   }
 }
 

@@ -1,16 +1,9 @@
 'use client'
-import { useActionState } from 'react'
 import ImagePreview from './imagePreview'
-import { createProduct, updateProduct } from '@/app/_action/product'
-import { ProductInput } from '@/app/_libs/formValidateSchema'
-import { useState } from 'react'
-import { redirect } from 'next/navigation'
 
-interface FormState {
-  message: string
-  errors: Partial<Record<keyof ProductInput, string[]>>
-  values?: Partial<ProductInput>
-}
+import { useState } from 'react'
+
+import { productMutation } from '@/app/_hook/productsMutation'
 
 interface ProductFormProps {
   initialProduct?: {
@@ -28,50 +21,28 @@ interface ProductFormProps {
 export default function ProductForm({ initialProduct }: ProductFormProps) {
   const [resetImagePreview, setResetImagePreview] = useState(0)
 
-  const [state, formAction, isPending] = useActionState<FormState, FormData>(
-    async (prevState: FormState, formData: FormData): Promise<FormState> => {
-      let result: FormState
+  const mutation = productMutation(initialProduct, setResetImagePreview)
 
-      if (initialProduct?.id) {
-        result = await updateProduct(
-          initialProduct.id,
-          typeof initialProduct.image === 'object'
-            ? initialProduct.image.public_id
-            : '',
-          prevState,
-          formData
-        )
-      } else {
-        result = await createProduct(prevState, formData)
-      }
+  const { data, error, isPending } = mutation
 
-      if (result.message !== 'error') {
-        setResetImagePreview((prev: number) => prev + 1)
-        redirect('/products')
-      }
+  const validationError =
+    error && JSON.parse((error as any)?.message).validationError
 
-      return result
-    },
-    {
-      message: '',
-      errors: {},
-      values: initialProduct
-        ? {
-            title: initialProduct.title,
-            description: initialProduct.description,
-            price: initialProduct.price,
-            totalQuantity: initialProduct.totalQuantity,
-            size: initialProduct.size,
-            category: initialProduct.category,
-          }
-        : {},
-    }
-  )
+  const errorMessage = validationError ? validationError : error?.message
+
+  interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
+
+  function submit(e: SubmitEvent): void {
+    e.preventDefault()
+    const form = e.target as HTMLFormElement
+    const formData = new FormData(form)
+    mutation.mutate(formData)
+  }
 
   return (
     <>
       <form
-        action={formAction}
+        onSubmit={(e) => submit(e)}
         className="max-w-xl ms-5 p-6 bg-white rounded-lg shadow-md space-y-4">
         <h2 className="text-2xl font-bold mb-4">
           {initialProduct ? 'Edit Product' : 'Create Product'}
@@ -81,20 +52,20 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
           name="title"
           placeholder="Title"
           className="w-full border rounded px-3 py-2"
-          defaultValue={state.values?.title}
+          defaultValue={initialProduct?.title}
         />
-        {state.errors?.title && (
-          <p className="text-sm text-red-600">{state.errors.title}</p>
+        {errorMessage?.title && (
+          <p className="text-sm text-red-600">{errorMessage.title}</p>
         )}
 
         <textarea
           name="description"
           placeholder="Description"
           className="w-full border rounded px-3 py-2"
-          defaultValue={state.values?.description}
+          defaultValue={initialProduct?.description}
         />
-        {state.errors?.description && (
-          <p className="text-sm text-red-600">{state.errors.description}</p>
+        {errorMessage?.description && (
+          <p className="text-sm text-red-600">{errorMessage.description}</p>
         )}
 
         <input
@@ -102,10 +73,10 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
           type="number"
           placeholder="Price"
           className="w-full border rounded px-3 py-2"
-          defaultValue={state.values?.price}
+          defaultValue={initialProduct?.price}
         />
-        {state.errors?.price && (
-          <p className="text-sm text-red-600">{state.errors.price}</p>
+        {errorMessage?.price && (
+          <p className="text-sm text-red-600">{errorMessage.price}</p>
         )}
 
         <input
@@ -113,30 +84,30 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
           type="number"
           placeholder="Total Quantity"
           className="w-full border rounded px-3 py-2"
-          defaultValue={state.values?.totalQuantity}
+          defaultValue={initialProduct?.totalQuantity}
         />
-        {state.errors?.totalQuantity && (
-          <p className="text-sm text-red-600">{state.errors.totalQuantity}</p>
+        {errorMessage?.totalQuantity && (
+          <p className="text-sm text-red-600">{errorMessage?.totalQuantity}</p>
         )}
 
         <input
           name="size"
           placeholder="Size (e.g. S, M, L, XL)"
           className="w-full border rounded px-3 py-2"
-          defaultValue={state.values?.size}
+          defaultValue={initialProduct?.size}
         />
-        {state.errors?.size && (
-          <p className="text-sm text-red-600">{state.errors.size}</p>
+        {errorMessage?.size && (
+          <p className="text-sm text-red-600">{errorMessage.size}</p>
         )}
 
         <input
           name="category"
           placeholder="Category"
           className="w-full border rounded px-3 py-2"
-          defaultValue={state.values?.category}
+          defaultValue={initialProduct?.category}
         />
-        {state.errors?.category && (
-          <p className="text-sm text-red-600">{state.errors.category}</p>
+        {errorMessage?.category && (
+          <p className="text-sm text-red-600">{errorMessage?.category}</p>
         )}
 
         <ImagePreview
@@ -150,8 +121,8 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
               : ''
           }
           key={resetImagePreview}></ImagePreview>
-        {state.errors?.image && (
-          <p className="text-sm text-red-600">{state.errors.image}</p>
+        {errorMessage?.image && (
+          <p className="text-sm text-red-600">{errorMessage?.image}</p>
         )}
 
         <button

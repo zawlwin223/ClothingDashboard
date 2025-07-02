@@ -5,7 +5,7 @@ import { ProductInput } from '../_libs/formValidateSchema'
 
 interface FormState {
   message: string
-  errors: Partial<Record<keyof ProductInput, string[]>>
+  errors: object
   values?: Partial<ProductInput>
 }
 

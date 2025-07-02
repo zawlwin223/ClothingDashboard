@@ -14,6 +14,8 @@ export default function FetchedProducts() {
   } = useQuery({
     queryKey: ['products'],
     queryFn: fetchDataFromFB,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false,
   })
 
   if (isLoading) {
