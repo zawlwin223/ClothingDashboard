@@ -9,6 +9,7 @@ interface OrderItem {
   title?: string
   price: number
   quantity: number
+
   size: string
   image: {
     url: string
@@ -24,10 +25,12 @@ interface Customer {
   state: string
   zipCode: string
   country: string
+  // date: string
 }
 
 interface Order {
   id: string
+  date: string
   customer: Customer
   items: OrderItem[]
   totalPrice: string
@@ -70,12 +73,13 @@ export default function OrdersTable() {
           <tbody>
             {Object.entries(data!).map(([key, order]) => {
               const typedOrder = order as Order
+              console.log('Order:', typedOrder)
               return (
                 <React.Fragment key={key}>
                   <tr key={`${key}-order`} className="border-t border-gray-300">
-                    {/* <td className="px-4 py-2 text-gray-500">
-                      {}
-                    </td> */}
+                    <td className="px-4 py-2 text-gray-500">
+                      {typedOrder.date}
+                    </td>
                     <td className="px-4 py-2 text-gray-500">
                       {typedOrder.customer.fullName}
                     </td>

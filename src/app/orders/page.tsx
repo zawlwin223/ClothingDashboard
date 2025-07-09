@@ -4,7 +4,7 @@ export default async function Dashboard() {
   // console.log('Fetched orders:', orders)
   return (
     <div>
-      <h1>Order Management</h1>
+      <h1 className="font-bold  text-[30px]">Order Management</h1>
     </div>
   )
 }
