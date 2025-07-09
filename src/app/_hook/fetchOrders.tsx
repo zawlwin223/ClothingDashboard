@@ -5,7 +5,7 @@ export function fetchOrders() {
     queryKey: ['orders'],
     queryFn: async () => {
       const databaseUrl = process.env.NEXT_PUBLIC_DATABASE_URL
-      console.log(databaseUrl)
+      
       if (!databaseUrl) throw new Error('DATABASE_URL is not defined')
       const response = await fetch(databaseUrl)
       if (!response.ok) throw new Error('Failed to fetch')

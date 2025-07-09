@@ -24,11 +24,19 @@ export default function Navigation() {
             Products
           </Link>
         </li>
-        <li className="mt-5">
+        {/* <li className="mt-5">
           <Link
             href="/addProduct"
             className={pathname === '/addProduct' ? classes.active : ''}>
             Add Product
+          </Link>
+        </li> */}
+
+        <li className="mt-5">
+          <Link
+            href="/orders"
+            className={pathname === '/orders' ? classes.active : ''}>
+            Orders
           </Link>
         </li>
       </ul>
