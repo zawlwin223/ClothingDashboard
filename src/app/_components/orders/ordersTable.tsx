@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import React from 'react'
 import { fetchOrders } from '@/app/_hook/fetchOrders'
-
+import { paginate } from '@/app/_utils/pagination'
+import PaginationButton from '../paginationButton'
 interface OrderItem {
   id: number
   title?: string
@@ -38,12 +39,20 @@ interface Order {
 
 export default function OrdersTable() {
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [page, setPage] = useState(1) // State to manage current page
 
-  const { data, isLoading, isError } = fetchOrders()
+  const { data: orders, isLoading, isError } = fetchOrders()
+  const arrayFormOrders = Object.entries(orders ?? {}).map(([id, data]) => ({
+    id,
+    ...(typeof data === 'object' && data !== null ? data : {}),
+  }))
 
   if (isLoading) return <div className="p-4">Loading...</div>
   if (isError)
     return <div className="p-4 text-red-500">Error loading orders</div>
+
+  const [paginatedOrders, totalPageRaw] = paginate(arrayFormOrders, page, 5)
+  const totalPage = typeof totalPageRaw === 'number' ? totalPageRaw : 1
 
   return (
     <div className="w-full p-4 border border-gray-300 rounded-lg bg-white shadow-md">
@@ -51,13 +60,11 @@ export default function OrdersTable() {
       <p className="mb-3 mt-2 text-gray-500">
         Review details of all customer orders.
       </p>
-
       <input
         type="text"
         placeholder="Filter By Customer Name"
         className="my-3 p-2 w-[300px] bg-gray-200 border-0 rounded-[2px] focus:outline-none focus:ring-2 focus:ring-gray-400"
       />
-
       <div className="w-full border border-gray-300 rounded-lg overflow-hidden mb-4">
         <table className="table-auto w-full">
           <thead>
@@ -71,7 +78,7 @@ export default function OrdersTable() {
             </tr>
           </thead>
           <tbody>
-            {Object.entries(data!).map(([key, order]) => {
+            {Object.entries(paginatedOrders!).map(([key, order]) => {
               const typedOrder = order as Order
               console.log('Order:', typedOrder)
               return (
@@ -134,6 +141,7 @@ export default function OrdersTable() {
           </tbody>
         </table>
       </div>
+      <PaginationButton setPage={setPage} page={page} totalPage={totalPage} />
     </div>
   )
 }

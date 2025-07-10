@@ -1,13 +1,16 @@
 // app/products/page.tsx
 'use client'
 import Image from 'next/image'
-import Card from '@/app/_components/products/card'
 import LinkButton from '../button'
 import { useQuery } from '@tanstack/react-query'
 import { fetchDataFromFB } from '@/app/_utils/firebase'
 import { table } from 'console'
+import { paginate } from '@/app/_utils/pagination'
+import { useState } from 'react'
+import PaginationButton from '../paginationButton'
 
 export default function ProductsList() {
+  const [page, setPage] = useState(1) // State to manage current page
   const {
     data: products = [],
     isLoading,
@@ -18,6 +21,9 @@ export default function ProductsList() {
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
   })
+
+  const [paginatedProducts, totalPageRaw] = paginate(products, page, 5) // Adjust page number as needed
+  const totalPage = typeof totalPageRaw === 'number' ? totalPageRaw : 1
 
   if (isLoading) {
     return <h1>Fetching</h1>
@@ -62,7 +68,7 @@ export default function ProductsList() {
             </tr>
           </thead>
           <tbody>
-            {(products as Product[]).map((product) =>
+            {(paginatedProducts as Product[]).map((product) =>
               'image' in product && 'title' in product && 'price' in product ? (
                 <tr key={product.id} className="border-t border-gray-300">
                   <td className="p-3">
@@ -111,6 +117,8 @@ export default function ProductsList() {
           </tbody>
         </table>
       </div>
+
+      <PaginationButton setPage={setPage} page={page} totalPage={totalPage} />
     </div>
   )
 }
