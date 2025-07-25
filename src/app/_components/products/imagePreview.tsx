@@ -29,7 +29,7 @@ export default function ImagePreview({ initialImg = '' }: ImagePreviewProps) {
   }
 
   return (
-    <>
+    <div className="mb-4">
       <input
         ref={inputFileRef}
         type="file"
@@ -50,10 +50,10 @@ export default function ImagePreview({ initialImg = '' }: ImagePreviewProps) {
           <img
             src={imagePreview}
             alt="Preview"
-            className="h-48 w-auto object-contain border rounded"
+            className="h-20 w-auto object-contain border rounded"
           />
         </div>
       )}
-    </>
+    </div>
   )
 }

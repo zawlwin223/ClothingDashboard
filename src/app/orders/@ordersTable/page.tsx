@@ -1,6 +1,6 @@
 import { Providers } from '@/app/providers'
-import OrdersTable from '@/app/_components/orders/ordersTable'
+import { DataTableDemo } from '@/app/_components/orders/customerTable'
 
 export default function Orders() {
-  return <OrdersTable></OrdersTable>
+  return <DataTableDemo></DataTableDemo>
 }

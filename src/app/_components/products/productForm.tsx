@@ -43,7 +43,8 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
     <>
       <form
         onSubmit={(e) => submit(e)}
-        className="max-w-xl ms-5 p-6 bg-white rounded-lg shadow-md space-y-4">
+        // className="max-w-xl ms-5 p-6 bg-white rounded-lg shadow-md space-y-4"
+      >
         <h2 className="text-2xl font-bold mb-4">
           {initialProduct ? 'Edit Product' : 'Create Product'}
         </h2>
@@ -51,7 +52,7 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
         <input
           name="title"
           placeholder="Title"
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.title}
         />
         {errorMessage?.title && (
@@ -61,7 +62,7 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
         <textarea
           name="description"
           placeholder="Description"
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.description}
         />
         {errorMessage?.description && (
@@ -72,7 +73,7 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
           name="price"
           type="number"
           placeholder="Price"
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.price}
         />
         {errorMessage?.price && (
@@ -83,7 +84,7 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
           name="totalQuantity"
           type="number"
           placeholder="Total Quantity"
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.totalQuantity}
         />
         {errorMessage?.totalQuantity && (
@@ -93,7 +94,7 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
         <input
           name="size"
           placeholder="Size (e.g. S, M, L, XL)"
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.size}
         />
         {errorMessage?.size && (
@@ -103,7 +104,7 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
         <input
           name="category"
           placeholder="Category"
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.category}
         />
         {errorMessage?.category && (
@@ -116,8 +117,8 @@ export default function ProductForm({ initialProduct }: ProductFormProps) {
               ? typeof initialProduct.image === 'string'
                 ? initialProduct.image
                 : typeof initialProduct.image === 'object'
-                ? initialProduct.image.url
-                : ''
+                  ? initialProduct.image.url
+                  : ''
               : ''
           }
           key={resetImagePreview}></ImagePreview>

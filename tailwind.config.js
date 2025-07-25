@@ -1,10 +1,13 @@
-// tailwind.config.js
-export const content = [
-  './pages/**/*.{js,ts,jsx,tsx}', // for Pages Router
-  './components/**/*.{js,ts,jsx,tsx}',
-  './app/**/*.{js,ts,jsx,tsx}', // if using App Router
-]
-export const theme = {
-  extend: {},
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
+    './src/app/**/*.{js,ts,jsx,tsx}',
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {},
+  },
+  plugins: [require('prettier-plugin-tailwindcss')],
 }
-export const plugins = []

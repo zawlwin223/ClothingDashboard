@@ -1,16 +1,138 @@
-// app/products/page.tsx
 'use client'
-import Image from 'next/image'
-import LinkButton from '../button'
+
+import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchDataFromFB } from '@/app/_utils/firebase'
-import { table } from 'console'
-import { paginate } from '@/app/_utils/pagination'
-import { useState } from 'react'
-import PaginationButton from '../paginationButton'
+import Image from 'next/image'
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from '@tanstack/react-table'
+import { MoreHorizontal } from 'lucide-react'
 
-export default function ProductsList() {
-  const [page, setPage] = useState(1) // State to manage current page
+import { Button } from '@/components/ui/button'
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+
+export type Product = {
+  id: string
+  image: unknown
+  title: unknown
+  price: unknown
+  totalQuantity?: unknown
+  size?: unknown
+  category?: unknown
+}
+
+export const columns: ColumnDef<Product>[] = [
+  {
+    accessorKey: 'image',
+    header: 'Image',
+    cell: ({ row }) => {
+      const imgUrl = row.getValue('image')
+      console.log('Image URL:', imgUrl)
+      return (
+        <Image
+          src={
+            typeof imgUrl === 'object' && imgUrl !== null
+              ? String((imgUrl as { url: unknown }).url)
+              : String(imgUrl)
+          }
+          alt={String(row.getValue('title'))}
+          width={50}
+          height={50}
+          className="object-contain"
+        />
+      )
+    },
+  },
+  {
+    accessorKey: 'title',
+    header: 'Titile',
+    cell: ({ row }) => <div className="lowercase">{row.getValue('title')}</div>,
+  },
+  {
+    accessorKey: 'price',
+    header: 'Price',
+    cell: ({ row }) => <div className="lowercase">{row.getValue('price')}</div>,
+  },
+  {
+    accessorKey: 'totalQuantity',
+    header: 'Quantity',
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('totalQuantity')}</div>
+    ),
+  },
+
+  {
+    accessorKey: 'size',
+    header: 'Size',
+    cell: ({ row }) => <div className="lowercase">{row.getValue('size')}</div>,
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category',
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue('category')}</div>
+    ),
+  },
+
+  {
+    id: 'actions',
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    },
+  },
+]
+
+type ProductListsTableProps = {
+  setProductFormModal: (value: boolean) => void
+}
+
+export default function ProductListsTable({
+  setProductFormModal,
+}: ProductListsTableProps) {
   const {
     data: products = [],
     isLoading,
@@ -22,103 +144,118 @@ export default function ProductsList() {
     refetchOnWindowFocus: false,
   })
 
-  const [paginatedProducts, totalPageRaw] = paginate(products, page, 5) // Adjust page number as needed
-  const totalPage = typeof totalPageRaw === 'number' ? totalPageRaw : 1
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
 
-  if (isLoading) {
-    return <h1>Fetching</h1>
-  }
+  const table = useReactTable({
+    data: products as Product[],
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  })
 
-  type Product = {
-    id: string
-    image: unknown
-    title: unknown
-    price: unknown
-    // description: unknown
-    totalQuantity?: unknown
-    size?: unknown
-    category?: unknown
-    // add other fields as needed
-  }
+  React.useEffect(() => {
+    table.setPageSize(5)
+  }, [table])
 
   return (
-    <div className="w-full p-4 border border-gray-300 rounded-lg bg-white shadow-md">
-      <h1 className="font-semibold text-[20px]">Products Lists</h1>
-      <p className="mb-3 mt-2 text-gray-500">
-        View, edit or delete your products
-      </p>
-
-      <input
-        type="text"
-        placeholder="Filter Products By Title"
-        className="my-3 p-2 w-[300px] bg-gray-200 border-0 rounded-[2px] focus:outline-none focus:ring-2 focus:ring-gray-400"
-      />
-
-      <div className="w-full border border-gray-300 rounded-lg overflow-hidden mb-4">
-        <table className="table-auto w-full">
-          <thead>
-            <tr className="text-left">
-              <th className="p-3 text-gray-500">Image</th>
-              <th className="p-3 text-gray-500">Title</th>
-              <th className="p-3 text-gray-500 text-center">Price</th>
-              <th className="p-3 text-gray-500 text-center">Quantity</th>
-              <th className="p-3 text-gray-500 text-center">Size</th>
-              <th className="p-3 text-gray-500 text-center">Category</th>
-              {/* <th className="p-3">Actions</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {(paginatedProducts as Product[]).map((product) =>
-              'image' in product && 'title' in product && 'price' in product ? (
-                <tr key={product.id} className="border-t border-gray-300">
-                  <td className="p-3">
-                    <Image
-                      src={
-                        typeof product.image === 'object' &&
-                        product.image !== null
-                          ? String((product.image as { url: unknown }).url)
-                          : String(product.image)
-                      }
-                      alt={String(product.title)}
-                      width={50}
-                      height={50}
-                      className="object-contain"
-                    />
-                  </td>
-
-                  <td className="p-3">
-                    <h2 className="text-gray-500">{String(product.title)}</h2>
-                  </td>
-
-                  <td className="p-3 text-center">
-                    <p className="text-gray-500">{String(product.price)}</p>
-                  </td>
-
-                  <td className="p-3 text-center">
-                    <p className="text-gray-500">
-                      {String(product.totalQuantity)}
-                    </p>
-                  </td>
-
-                  <td className="p-3 text-center">
-                    <p className="text-gray-500">{String(product.size)}</p>
-                  </td>
-
-                  <td className="p-3 text-center">
-                    <p className="text-gray-500">{String(product.category)}</p>
-                  </td>
-
-                  <td className="p-3">
-                    <button>...</button>
-                  </td>
-                </tr>
-              ) : null
-            )}
-          </tbody>
-        </table>
+    <div className="w-full">
+      <div className="flex items-center justify-between py-4">
+        <Input
+          placeholder="Filter By title..."
+          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+          onChange={(event) =>
+            table.getColumn('title')?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Button onClick={() => setProductFormModal(true)}>
+          Add New Product
+        </Button>
       </div>
-
-      <PaginationButton setPage={setPage} page={page} totalPage={totalPage} />
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
+            Next
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
