@@ -40,99 +40,110 @@ import {
 
 export type Product = {
   id: string
-  image: unknown
-  title: unknown
-  price: unknown
-  totalQuantity?: unknown
-  size?: unknown
-  category?: unknown
+  title: string
+  description: string
+  price: string
+  totalQuantity: string
+  size: string
+  category: string
+  image: string | { url: string; public_id: string }
 }
-
-export const columns: ColumnDef<Product>[] = [
-  {
-    accessorKey: 'image',
-    header: 'Image',
-    cell: ({ row }) => {
-      const imgUrl = row.getValue('image')
-      console.log('Image URL:', imgUrl)
-      return (
-        <Image
-          src={
-            typeof imgUrl === 'object' && imgUrl !== null
-              ? String((imgUrl as { url: unknown }).url)
-              : String(imgUrl)
-          }
-          alt={String(row.getValue('title'))}
-          width={50}
-          height={50}
-          className="object-contain"
-        />
-      )
-    },
-  },
-  {
-    accessorKey: 'title',
-    header: 'Titile',
-    cell: ({ row }) => <div className="lowercase">{row.getValue('title')}</div>,
-  },
-  {
-    accessorKey: 'price',
-    header: 'Price',
-    cell: ({ row }) => <div className="lowercase">{row.getValue('price')}</div>,
-  },
-  {
-    accessorKey: 'totalQuantity',
-    header: 'Quantity',
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('totalQuantity')}</div>
-    ),
-  },
-
-  {
-    accessorKey: 'size',
-    header: 'Size',
-    cell: ({ row }) => <div className="lowercase">{row.getValue('size')}</div>,
-  },
-  {
-    accessorKey: 'category',
-    header: 'Category',
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('category')}</div>
-    ),
-  },
-
-  {
-    id: 'actions',
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
 
 type ProductListsTableProps = {
   setProductFormModal: (value: boolean) => void
+  setEditProductFormModal: (product: Product) => void
 }
-
 export default function ProductListsTable({
   setProductFormModal,
+  setEditProductFormModal,
 }: ProductListsTableProps) {
+  const columns: ColumnDef<Product>[] = [
+    {
+      accessorKey: 'image',
+      header: 'Image',
+      cell: ({ row }) => {
+        const imgUrl = row.getValue('image')
+        console.log('Image URL:', imgUrl)
+        return (
+          <Image
+            src={
+              typeof imgUrl === 'object' && imgUrl !== null
+                ? String((imgUrl as { url: unknown }).url)
+                : String(imgUrl)
+            }
+            alt={String(row.getValue('title'))}
+            width={50}
+            height={50}
+            className="object-contain"
+          />
+        )
+      },
+    },
+    {
+      accessorKey: 'title',
+      header: 'Titile',
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue('title')}</div>
+      ),
+    },
+    {
+      accessorKey: 'price',
+      header: 'Price',
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue('price')}</div>
+      ),
+    },
+    {
+      accessorKey: 'totalQuantity',
+      header: 'Quantity',
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue('totalQuantity')}</div>
+      ),
+    },
+
+    {
+      accessorKey: 'size',
+      header: 'Size',
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue('size')}</div>
+      ),
+    },
+    {
+      accessorKey: 'category',
+      header: 'Category',
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue('category')}</div>
+      ),
+    },
+
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => {
+        const product = row.original
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => setEditProductFormModal(product)}>
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
+
   const {
     data: products = [],
     isLoading,

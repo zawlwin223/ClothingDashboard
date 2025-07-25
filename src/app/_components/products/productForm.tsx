@@ -16,12 +16,21 @@ interface ProductFormProps {
     category: string
     image: string | { url: string; public_id: string }
   }
+  onClose?: () => void
 }
 
-export default function ProductForm({ initialProduct }: ProductFormProps) {
+export default function ProductForm({
+  initialProduct,
+  onClose,
+}: ProductFormProps) {
+  console.log('Initial Product:', initialProduct)
   const [resetImagePreview, setResetImagePreview] = useState(0)
 
-  const mutation = productMutation(initialProduct, setResetImagePreview)
+  const mutation = productMutation(
+    initialProduct,
+    setResetImagePreview,
+    onClose
+  )
 
   const { data, error, isPending } = mutation
 

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { createProduct, updateProduct } from '../_action/product'
-import { redirectTo } from '../_utils/redirect'
+import { useQueryClient } from '@tanstack/react-query'
 export function productMutation(
   initialProduct?: {
     id: string
@@ -12,8 +12,10 @@ export function productMutation(
     category: string
     image: string | { url: string; public_id: string }
   },
-  setResetImagePreview?: React.Dispatch<React.SetStateAction<number>>
+  setResetImagePreview?: React.Dispatch<React.SetStateAction<number>>,
+  onClose?: () => void
 ) {
+  const queryClient = useQueryClient()
   return useMutation<any, Error, FormData>({
     mutationFn: async (formData: FormData) => {
       if (initialProduct?.id) {
@@ -34,7 +36,10 @@ export function productMutation(
           setResetImagePreview((prev: number) => prev + 1)
         }
       }
-      redirectTo('/products')
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      if (onClose) {
+        onClose()
+      }
     },
   })
 }
