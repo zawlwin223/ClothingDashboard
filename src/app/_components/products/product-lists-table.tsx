@@ -4,6 +4,8 @@ import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchDataFromFB } from '@/app/_utils/firebase'
 import Image from 'next/image'
+// import { deleteProduct } from '@/app/_action/product'
+import { deleteProductMutation } from '@/app/_hook/productsMutation'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -57,6 +59,8 @@ export default function ProductListsTable({
   setProductFormModal,
   setEditProductFormModal,
 }: ProductListsTableProps) {
+  const deleteProduct = deleteProductMutation()
+
   const columns: ColumnDef<Product>[] = [
     {
       accessorKey: 'image',
@@ -136,7 +140,19 @@ export default function ProductListsTable({
                 onClick={() => setEditProductFormModal(product)}>
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  deleteProduct.mutate({
+                    productId: product.id,
+                    imageId:
+                      typeof product.image === 'object' &&
+                      product.image !== null
+                        ? product.image.public_id
+                        : '',
+                  })
+                }>
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )

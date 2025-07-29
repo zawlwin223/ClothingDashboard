@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { createProduct, updateProduct } from '../_action/product'
 import { useQueryClient } from '@tanstack/react-query'
+import { deleteProduct } from '../_action/product'
 export function productMutation(
   initialProduct?: {
     id: string
@@ -40,6 +41,26 @@ export function productMutation(
       if (onClose) {
         onClose()
       }
+    },
+  })
+}
+
+interface DeleteProductMutationParams {
+  productId: string
+  imageId: string
+}
+
+type DeleteProductArgs = { productId: string; imageId: string }
+
+export function deleteProductMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ productId, imageId }: DeleteProductArgs) => {
+      console.log('Deleting product:', productId, 'with image ID:', imageId)
+      deleteProduct(productId, imageId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
     },
   })
 }

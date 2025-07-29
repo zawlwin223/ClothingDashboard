@@ -10,7 +10,7 @@ export default function Modal({
   onClose,
 }: {
   children: ReactNode
-  onClose: (value: boolean) => void
+  onClose: () => void
 }) {
   //   const [isOpen, setIsOpen] = useState(false)
 
@@ -23,7 +23,7 @@ export default function Modal({
         {/* Modal Content */}
         <div className="relative z-50 w-[90%] max-w-md bg-white rounded-xl p-6 shadow-lg">
           <button
-            onClick={() => onClose(false)}
+            onClick={() => onClose()}
             className="absolute top-3 right-3 text-gray-500 hover:text-black">
             <X className="w-5 h-5" />
           </button>
