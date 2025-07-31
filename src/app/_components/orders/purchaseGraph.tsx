@@ -1,6 +1,6 @@
 'use client'
 import { Bar } from 'react-chartjs-2'
-import { fetchOrders } from '@/app/_hook/fetchOrders'
+import { useFetchOrders } from '@/app/_hook/fetchOrders'
 import { getLast7dates } from '@/app/_utils/getLast7dates'
 import {
   Chart as ChartJS,
@@ -29,7 +29,7 @@ const PurchaseGraph = () => {
     totalPrice: string
   }
 
-  const { data: orders, isLoading, isError } = fetchOrders()
+  const { data: orders, isLoading, isError } = useFetchOrders()
 
   Object.values(orders || {}).forEach((order) => {
     const { date, totalPrice } = order as Order

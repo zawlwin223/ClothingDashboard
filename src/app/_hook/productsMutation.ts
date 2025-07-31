@@ -2,17 +2,11 @@ import { useMutation } from '@tanstack/react-query'
 import { createProduct, updateProduct } from '../_action/product'
 import { useQueryClient } from '@tanstack/react-query'
 import { deleteProduct } from '../_action/product'
-export function productMutation(
-  initialProduct?: {
-    id: string
-    title: string
-    description: string
-    price: string
-    totalQuantity: string
-    size: string
-    category: string
-    image: string | { url: string; public_id: string }
-  },
+import { Product } from '../type/productType'
+
+type DeleteProductArgs = { productId: string; imageId: string }
+export function useCreateProduct(
+  initialProduct?: Product,
   setResetImagePreview?: React.Dispatch<React.SetStateAction<number>>,
   onClose?: () => void
 ) {
@@ -45,14 +39,7 @@ export function productMutation(
   })
 }
 
-interface DeleteProductMutationParams {
-  productId: string
-  imageId: string
-}
-
-type DeleteProductArgs = { productId: string; imageId: string }
-
-export function deleteProductMutation() {
+export function useDeleteProduct() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ productId, imageId }: DeleteProductArgs) => {

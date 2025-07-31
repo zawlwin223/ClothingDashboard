@@ -41,23 +41,23 @@ export async function fetchDataFromFB() {
   }
 }
 
-export async function getDataFromFB(id: string) {
-  console.log('Fetching data for ID:', id)
-  try {
-    const docRef = adminDb.collection('products').doc(id)
-    const doc = await docRef.get()
-    if (!doc.exists) {
-      throw new Error(`No document found with ID: ${id}`)
-    }
-    return { id: doc.id, ...doc.data() }
-  } catch (error) {
-    throw new Error(
-      `Error fetching document: ${
-        error instanceof Error ? error.message : 'Unknown error'
-      }`
-    )
-  }
-}
+// export async function getDataFromFB(id: string) {
+//   console.log('Fetching data for ID:', id)
+//   try {
+//     const docRef = adminDb.collection('products').doc(id)
+//     const doc = await docRef.get()
+//     if (!doc.exists) {
+//       throw new Error(`No document found with ID: ${id}`)
+//     }
+//     return { id: doc.id, ...doc.data() }
+//   } catch (error) {
+//     throw new Error(
+//       `Error fetching document: ${
+//         error instanceof Error ? error.message : 'Unknown error'
+//       }`
+//     )
+//   }
+// }
 
 export async function deleteDataFromFB(productId: string) {
   try {

@@ -14,7 +14,7 @@ import {
   VisibilityState,
 } from '@tanstack/react-table'
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react'
-import { fetchOrders } from '@/app/_hook/fetchOrders'
+import { useFetchOrders } from '@/app/_hook/fetchOrders'
 
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -40,49 +40,12 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-export type Customer = {
-  fullName: string
-  email: string
-  address: string
-  city: string
-  state: string
-  zipCode: string
-  country: string
-  // date: string
-}
-
-// export type Order = {
-//   id: string
-//   date: string
-//   customer: Customer
-//   items: any[]
-//   totalPrice: string
-// }
-
-type OrderItem = {
-  id: string
-  title?: string
-  price: number
-  quantity: number
-  size: string
-  image: {
-    url: string
-    alt?: string
-  }
-}
-
-interface Order {
-  id: string
-  date: string
-  customer: Customer
-  items: OrderItem[]
-  totalPrice: string
-}
+import { Order } from '@/app/type/orderType'
 
 export function DataTableDemo() {
-  const [customerOrderModal, setCustomerOrderModal] = useState<
-    OrderItem[] | false
-  >(false)
+  const [customerOrderModal, setCustomerOrderModal] = useState<Order | false>(
+    false
+  )
 
   const columns: ColumnDef<Order>[] = [
     {
@@ -140,9 +103,7 @@ export function DataTableDemo() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
-                  console.log('it works')
-                  console.log('View customer orders:', row.original)
-                  setCustomerOrderModal(row.original.items)
+                  setCustomerOrderModal(row.original)
                 }}>
                 View Orders
               </DropdownMenuItem>
@@ -153,7 +114,7 @@ export function DataTableDemo() {
       },
     },
   ]
-  const { data, isLoading, isError } = fetchOrders()
+  const { data, isLoading, isError } = useFetchOrders()
 
   const arrayFormData = Object.entries(data ?? {}).map(([id, data]) => ({
     id,
@@ -306,7 +267,7 @@ export function DataTableDemo() {
       </div>
       {customerOrderModal && (
         <Modal onClose={() => setCustomerOrderModal(false)}>
-          <CustomerOrderModal items={customerOrderModal} />
+          <CustomerOrderModal order={customerOrderModal} />
         </Modal>
       )}
     </>

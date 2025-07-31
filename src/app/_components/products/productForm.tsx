@@ -3,19 +3,11 @@ import ImagePreview from './imagePreview'
 
 import { useState } from 'react'
 
-import { productMutation } from '@/app/_hook/productsMutation'
+import { useCreateProduct } from '@/app/_hook/productsMutation'
+import { Product } from '@/app/type/productType'
 
 interface ProductFormProps {
-  initialProduct?: {
-    id: string
-    title: string
-    description: string
-    price: string
-    totalQuantity: string
-    size: string
-    category: string
-    image: string | { url: string; public_id: string }
-  }
+  initialProduct?: Product
   onClose?: () => void
 }
 
@@ -23,10 +15,9 @@ export default function ProductForm({
   initialProduct,
   onClose,
 }: ProductFormProps) {
-  console.log('Initial Product:', initialProduct)
   const [resetImagePreview, setResetImagePreview] = useState(0)
 
-  const mutation = productMutation(
+  const mutation = useCreateProduct(
     initialProduct,
     setResetImagePreview,
     onClose

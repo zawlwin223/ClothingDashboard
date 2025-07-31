@@ -8,7 +8,8 @@ import { useState } from 'react'
 import Modal from '../_components/modal'
 import ProductForm from '../_components/products/productForm'
 // Import the Product type
-import type { Product } from '../_components/products/product-lists-table'
+// import type { Product } from '../_components/products/product-lists-table'
+import { Product } from '../type/productType'
 
 export default function Products() {
   const [addProductFormModal, setAddProductFormModal] = useState(false)

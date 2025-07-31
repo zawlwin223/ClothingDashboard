@@ -4,8 +4,10 @@ import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchDataFromFB } from '@/app/_utils/firebase'
 import Image from 'next/image'
+import { Product } from '@/app/type/productType'
 // import { deleteProduct } from '@/app/_action/product'
-import { deleteProductMutation } from '@/app/_hook/productsMutation'
+import { useDeleteProduct } from '@/app/_hook/productsMutation'
+import { useFetchProducts } from '@/app/_hook/fetchProducts'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -40,17 +42,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-export type Product = {
-  id: string
-  title: string
-  description: string
-  price: string
-  totalQuantity: string
-  size: string
-  category: string
-  image: string | { url: string; public_id: string }
-}
-
 type ProductListsTableProps = {
   setProductFormModal: (value: boolean) => void
   setEditProductFormModal: (product: Product) => void
@@ -59,7 +50,7 @@ export default function ProductListsTable({
   setProductFormModal,
   setEditProductFormModal,
 }: ProductListsTableProps) {
-  const deleteProduct = deleteProductMutation()
+  const deleteProduct = useDeleteProduct()
 
   const columns: ColumnDef<Product>[] = [
     {
@@ -160,16 +151,7 @@ export default function ProductListsTable({
     },
   ]
 
-  const {
-    data: products = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['products'],
-    queryFn: fetchDataFromFB,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    refetchOnWindowFocus: false,
-  })
+  const { data: products = [], isLoading, error } = useFetchProducts()
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
