@@ -15,7 +15,7 @@ export default function CustomerOrderModal({ order }: { order: Order }) {
         </p>
       </div>
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin">
+      <div className=" overflow-y-auto overflow-x-hidden scrollbar-thin h-[400px]">
         {order.items.map((item, index) => (
           <div
             key={`${item.id}-${index}`}

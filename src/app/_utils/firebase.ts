@@ -1,5 +1,6 @@
 'use server'
 import { adminDb } from '@/app/_libs/fireBaseAdmin'
+import { getDatabase } from 'firebase-admin/database'
 
 interface Product {
   title: string
@@ -83,6 +84,15 @@ export async function updateDataFromFb({
     const docRef = await adminDb.collection('products').doc(firebaseId)
     await docRef.update(updatedData)
     return { message: 'success' }
+  } catch (error: unknown) {
+    return new Error(error instanceof Error ? error.message : 'Unknown error')
+  }
+}
+
+async function deleteOrderFromFb() {
+  try {
+    const db = getDatabase()
+    await db.ref('').remove()
   } catch (error: unknown) {
     return new Error(error instanceof Error ? error.message : 'Unknown error')
   }

@@ -4,7 +4,7 @@ export function useFetchOrders() {
   return useQuery({
     queryKey: ['orders'],
     queryFn: async () => {
-      const databaseUrl = process.env.NEXT_PUBLIC_DATABASE_URL
+      const databaseUrl = process.env.NEXT_PUBLIC_DATABASE_URL + 'orders.json'
 
       if (!databaseUrl) throw new Error('DATABASE_URL is not defined')
       const response = await fetch(databaseUrl)

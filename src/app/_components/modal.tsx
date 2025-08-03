@@ -21,7 +21,7 @@ export default function Modal({
         <div className="fixed inset-0 bg-black/50  pointer-events-none"></div>
 
         {/* Modal Content */}
-        <div className="relative z-50 w-[90%] h-[500px] max-w-md bg-white rounded-xl p-6 shadow-lg">
+        <div className="relative z-50 w-[90%] max-w-md bg-white rounded-xl p-6 shadow-lg">
           <button
             onClick={() => onClose()}
             className="absolute top-3 right-3 text-gray-500 hover:text-black">

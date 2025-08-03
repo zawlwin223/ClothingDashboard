@@ -1,6 +1,7 @@
 'use client'
 
-import * as React from 'react'
+// import * as React from 'react'
+// import { useState } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -15,11 +16,14 @@ import {
 } from '@tanstack/react-table'
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react'
 import { useFetchOrders } from '@/app/_hook/fetchOrders'
+import { useDeleteOrder } from '@/app/_hook/ordersMutation'
+import { useOrderStatusUpdate } from '@/app/_hook/ordersMutation'
 
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import CustomerOrderModal from '@/app/_components/orders/customerOrderModal'
 import Modal from '../modal'
+import { Badge } from '@/components/ui/badge'
 
 import {
   DropdownMenu,
@@ -47,6 +51,8 @@ export function DataTableDemo() {
     false
   )
 
+  const orderDeleteMutation = useDeleteOrder()
+  const orderStatusMutation = useOrderStatusUpdate()
   const columns: ColumnDef<Order>[] = [
     {
       accessorKey: 'date',
@@ -87,6 +93,19 @@ export function DataTableDemo() {
       ),
     },
     {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => (
+        <div className="lowercase">
+          <Badge
+            variant="default"
+            className={` text-white ${!row.original.status ? 'bg-yellow-500' : row.original.status === 'Shipped' ? 'bg-green-500' : 'bg-blue-500'}`}>
+            {row.original.status ? row.original.status : 'Pending'}
+          </Badge>
+        </div>
+      ),
+    },
+    {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
@@ -107,7 +126,21 @@ export function DataTableDemo() {
                 }}>
                 View Orders
               </DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  orderStatusMutation.mutate({
+                    id: row.original.id,
+                    status: 'Shipped',
+                  })
+                }}>
+                Shipped
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  orderDeleteMutation.mutate(row.original.id)
+                }}>
+                <span className="text-red-700">Delete</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )
@@ -121,13 +154,10 @@ export function DataTableDemo() {
     ...(typeof data === 'object' && data !== null ? data : {}),
   })) as Order[]
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data: arrayFormData,

@@ -27,4 +27,5 @@ export interface Order {
   customer: Customer
   items: OrderItem[]
   totalPrice: string
+  status?: string
 }

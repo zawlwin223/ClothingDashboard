@@ -5,6 +5,8 @@ import { useState } from 'react'
 
 import { useCreateProduct } from '@/app/_hook/productsMutation'
 import { Product } from '@/app/type/productType'
+import { Button } from '@/components/ui/button'
+import { string } from 'zod'
 
 interface ProductFormProps {
   initialProduct?: Product
@@ -41,10 +43,7 @@ export default function ProductForm({
 
   return (
     <>
-      <form
-        onSubmit={(e) => submit(e)}
-        // className="max-w-xl ms-5 p-6 bg-white rounded-lg shadow-md space-y-4"
-      >
+      <form onSubmit={(e) => submit(e)} className="flex flex-col">
         <h2 className="text-2xl font-bold mb-4">
           {initialProduct ? 'Edit Product' : 'Create Product'}
         </h2>
@@ -64,52 +63,67 @@ export default function ProductForm({
           placeholder="Description"
           className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.description}
+          // rows:string="5"
+          // cols:string="33"
         />
         {errorMessage?.description && (
           <p className="text-sm text-red-600">{errorMessage.description}</p>
         )}
 
-        <input
-          name="price"
-          type="number"
-          placeholder="Price"
-          className="w-full border rounded px-3 py-2 mb-4"
-          defaultValue={initialProduct?.price}
-        />
-        {errorMessage?.price && (
-          <p className="text-sm text-red-600">{errorMessage.price}</p>
-        )}
+        <div className="w-full flex">
+          <div className="flex flex-col me-4">
+            <input
+              name="price"
+              type="number"
+              placeholder="Price"
+              className="w-full border rounded px-3 py-2 mb-4 me-3"
+              defaultValue={initialProduct?.price}
+            />
+            {errorMessage?.price && (
+              <p className="text-sm text-red-600">{errorMessage.price}</p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <input
+              name="totalQuantity"
+              type="number"
+              placeholder="Total Quantity"
+              className="w-full border rounded px-3 py-2 mb-4"
+              defaultValue={initialProduct?.totalQuantity}
+            />
+            {errorMessage?.totalQuantity && (
+              <p className="text-sm text-red-600">
+                {errorMessage?.totalQuantity}
+              </p>
+            )}
+          </div>
+        </div>
 
-        <input
-          name="totalQuantity"
-          type="number"
-          placeholder="Total Quantity"
-          className="w-full border rounded px-3 py-2 mb-4"
-          defaultValue={initialProduct?.totalQuantity}
-        />
-        {errorMessage?.totalQuantity && (
-          <p className="text-sm text-red-600">{errorMessage?.totalQuantity}</p>
-        )}
+        <div className="w-full flex ">
+          <div className="flex flex-col me-4">
+            <input
+              name="size"
+              placeholder="Size (e.g. S, M, L, XL)"
+              className="w-full border rounded px-3 py-2 mb-4 me-4"
+              defaultValue={initialProduct?.size}
+            />
+            {errorMessage?.size && (
+              <p className="text-sm text-red-600">{errorMessage.size}</p>
+            )}
+          </div>
 
-        <input
-          name="size"
-          placeholder="Size (e.g. S, M, L, XL)"
-          className="w-full border rounded px-3 py-2 mb-4"
-          defaultValue={initialProduct?.size}
-        />
-        {errorMessage?.size && (
-          <p className="text-sm text-red-600">{errorMessage.size}</p>
-        )}
-
-        <input
-          name="category"
-          placeholder="Category"
-          className="w-full border rounded px-3 py-2 mb-4"
-          defaultValue={initialProduct?.category}
-        />
-        {errorMessage?.category && (
-          <p className="text-sm text-red-600">{errorMessage?.category}</p>
-        )}
+          <div className="flex flex-col">
+            <input
+              name="category"
+              placeholder="Category"
+              className="w-full border rounded px-3 py-2 mb-4"
+              defaultValue={initialProduct?.category}
+            />
+            {errorMessage?.category && (
+              <p className="text-sm text-red-600">{errorMessage?.category}</p>
+            )}
+          </div>
+        </div>
 
         <ImagePreview
           initialImg={
@@ -126,11 +140,7 @@ export default function ProductForm({
           <p className="text-sm text-red-600">{errorMessage?.image}</p>
         )}
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white rounded py-2 hover:bg-blue-700 transition">
-          {isPending ? 'pending...' : 'Submit'}
-        </button>
+        <Button type="submit">{isPending ? 'pending...' : 'Submit'}</Button>
       </form>
     </>
   )
