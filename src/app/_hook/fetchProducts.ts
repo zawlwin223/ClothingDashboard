@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchDataFromFB } from '../_utils/firebase'
+import { fetchDataFromFB } from '../_action/firebase'
 export function useFetchProducts() {
   return useQuery({
     queryKey: ['products'],
-    queryFn: fetchDataFromFB,
+    queryFn: async () => {
+      const res = await fetch('../api/products')
+      if (!res.ok) return new Error('Error Fetching Products')
+      const data = res.json()
+      return data
+    },
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
   })

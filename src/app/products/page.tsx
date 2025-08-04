@@ -16,7 +16,7 @@ export default function Products() {
   const [editProductFormModal, setEditProductFormModal] =
     useState<Product | null>(null)
   return (
-    <div className="w-full p-8 relative">
+    <div className="w-full p-8 mt-2 relative">
       <div className="flex justify-between mb-6 items-center ">
         <h1 className="font-bold  text-[30px]">Product Management</h1>
       </div>

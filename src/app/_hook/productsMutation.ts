@@ -22,7 +22,15 @@ export function useCreateProduct(
           formData
         )
       } else {
-        return await createProduct(formData)
+        console.log('Hello')
+        console.log(formData)
+        const res = await fetch('../api/products', {
+          method: 'POST',
+          body: JSON.stringify(formData),
+        })
+        const data = await res.json()
+        return data
+        // return await createProduct(formData)
       }
     },
     onSuccess: (data) => {
@@ -43,8 +51,14 @@ export function useDeleteProduct() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ productId, imageId }: DeleteProductArgs) => {
-      console.log('Deleting product:', productId, 'with image ID:', imageId)
-      deleteProduct(productId, imageId)
+      const res = await fetch(
+        `../api/products?productId=${productId}&imageId=${imageId}`,
+        {
+          method: 'DELETE',
+        }
+      )
+      const data = await res.json()
+      return data
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })

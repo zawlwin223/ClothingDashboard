@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { fetchDataFromFB } from '@/app/_utils/firebase'
+import { fetchDataFromFB } from '@/app/_action/firebase'
 import Image from 'next/image'
 import { Product } from '@/app/type/productType'
 // import { deleteProduct } from '@/app/_action/product'
@@ -58,7 +58,6 @@ export default function ProductListsTable({
       header: 'Image',
       cell: ({ row }) => {
         const imgUrl = row.getValue('image')
-        console.log('Image URL:', imgUrl)
         return (
           <Image
             src={
@@ -67,8 +66,8 @@ export default function ProductListsTable({
                 : String(imgUrl)
             }
             alt={String(row.getValue('title'))}
-            width={50}
-            height={50}
+            width={30}
+            height={30}
             className="object-contain"
           />
         )

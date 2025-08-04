@@ -89,11 +89,11 @@ export async function updateDataFromFb({
   }
 }
 
-async function deleteOrderFromFb() {
-  try {
-    const db = getDatabase()
-    await db.ref('').remove()
-  } catch (error: unknown) {
-    return new Error(error instanceof Error ? error.message : 'Unknown error')
-  }
-}
+// async function deleteOrderFromFb() {
+//   try {
+//     const db = getDatabase()
+//     await db.ref('').remove()
+//   } catch (error: unknown) {
+//     return new Error(error instanceof Error ? error.message : 'Unknown error')
+//   }
+// }

@@ -1,5 +1,5 @@
 import ProductForm from '@/app/_components/products/productForm'
-import { getDataFromFB } from '@/app/_utils/firebase'
+import { getDataFromFB } from '@/app/_action/firebase'
 import { Providers } from '@/app/providers'
 
 interface PageProps {

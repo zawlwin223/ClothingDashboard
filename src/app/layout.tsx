@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import Navigation from './_components/nav/Navigation'
+import { AppSidebar } from './_components/nav/Navigation'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 
 import './globals.css'
 import { Providers } from './providers'
@@ -28,10 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex">
-        <Navigation />
-        <main className="h-screen pt-5 flex-5 scrollbar-hide bg-gray-100  overflow-y-scroll">
-          <Providers>{children}</Providers>
-        </main>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="h-screen pt-5 flex-5 scrollbar-hide bg-gray-100  overflow-y-scroll">
+            <SidebarTrigger />
+            <Providers>{children}</Providers>
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   )

@@ -1,3 +1,4 @@
+'use server'
 import cloudinary from '../_libs/cloudinary'
 
 interface DeleteImageParams {
