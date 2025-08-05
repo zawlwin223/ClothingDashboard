@@ -1,13 +1,18 @@
 // validateForm.ts
-import { console } from 'inspector'
+// import { console } from 'inspector'
 import { productSchema } from '../_libs/formValidateSchema'
 import { ProductInput } from '../_libs/formValidateSchema'
 
 interface FormState {
-  message: string
-  errors: object
-  values?: Partial<ProductInput>
+  errors: object | boolean
+  values?: Partial<ProductInput> | undefined
 }
+
+// type ValidateFormResult = {
+//   message: string
+//   errors: Partial<Record<keyof ProductInput, string>> | null
+//   values: Partial<ProductInput>
+// }
 
 export function validateForm(formData: FormData): FormState {
   const initialImage = formData.get('currentImg') // existing image info
@@ -19,8 +24,8 @@ export function validateForm(formData: FormData): FormState {
   const image = hasUploadedImage
     ? uploadedImage
     : hasInitialImage
-    ? initialImage
-    : ''
+      ? initialImage
+      : ''
 
   const raw = {
     title: formData.get('title'),
@@ -38,7 +43,6 @@ export function validateForm(formData: FormData): FormState {
 
   if (!result.success) {
     return {
-      message: 'error',
       errors: result.error.flatten().fieldErrors,
       values: {
         title: String(raw.title || ''),
@@ -53,8 +57,7 @@ export function validateForm(formData: FormData): FormState {
   }
 
   return {
-    message: 'success',
-    errors: {},
+    errors: false,
     values: result.data,
   }
 }

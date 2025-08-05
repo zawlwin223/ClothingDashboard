@@ -6,7 +6,12 @@ import { useState } from 'react'
 import { useCreateProduct } from '@/app/_hook/productsMutation'
 import { Product } from '@/app/type/productType'
 import { Button } from '@/components/ui/button'
-import { string } from 'zod'
+import { validateForm } from '@/app/_utils/validateForm'
+import { ProductInput } from '@/app/_libs/formValidateSchema'
+import { error } from 'console'
+// import { string } from 'zod'
+
+interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
 
 interface ProductFormProps {
   initialProduct?: Product
@@ -18,6 +23,7 @@ export default function ProductForm({
   onClose,
 }: ProductFormProps) {
   const [resetImagePreview, setResetImagePreview] = useState(0)
+  const [validationError, setValidationError] = useState<any>(false)
 
   const mutation = useCreateProduct(
     initialProduct,
@@ -25,20 +31,20 @@ export default function ProductForm({
     onClose
   )
 
-  const { data, error, isPending } = mutation
-
-  const validationError =
-    error && JSON.parse((error as any)?.message).validationError
-
-  const errorMessage = validationError ? validationError : error?.message
-
-  interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
+  const { isPending } = mutation
 
   function submit(e: SubmitEvent): void {
     e.preventDefault()
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
-    mutation.mutate(formData)
+    const { errors, values } = validateForm(formData)
+    console.log(errors)
+    if (errors) {
+      setValidationError(errors)
+      return
+    } else {
+      mutation.mutate(values as ProductInput)
+    }
   }
 
   return (
@@ -54,8 +60,8 @@ export default function ProductForm({
           className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.title}
         />
-        {errorMessage?.title && (
-          <p className="text-sm text-red-600">{errorMessage.title}</p>
+        {validationError?.title && (
+          <p className="text-sm text-red-600">{validationError.title}</p>
         )}
 
         <textarea
@@ -66,8 +72,8 @@ export default function ProductForm({
           // rows:string="5"
           // cols:string="33"
         />
-        {errorMessage?.description && (
-          <p className="text-sm text-red-600">{errorMessage.description}</p>
+        {validationError?.description && (
+          <p className="text-sm text-red-600">{validationError.description}</p>
         )}
 
         <div className="w-full flex">
@@ -79,8 +85,8 @@ export default function ProductForm({
               className="w-full border rounded px-3 py-2 mb-4 me-3"
               defaultValue={initialProduct?.price}
             />
-            {errorMessage?.price && (
-              <p className="text-sm text-red-600">{errorMessage.price}</p>
+            {validationError?.price && (
+              <p className="text-sm text-red-600">{validationError.price}</p>
             )}
           </div>
           <div className="flex flex-col">
@@ -91,9 +97,9 @@ export default function ProductForm({
               className="w-full border rounded px-3 py-2 mb-4"
               defaultValue={initialProduct?.totalQuantity}
             />
-            {errorMessage?.totalQuantity && (
+            {validationError?.totalQuantity && (
               <p className="text-sm text-red-600">
-                {errorMessage?.totalQuantity}
+                {validationError?.totalQuantity}
               </p>
             )}
           </div>
@@ -107,8 +113,8 @@ export default function ProductForm({
               className="w-full border rounded px-3 py-2 mb-4 me-4"
               defaultValue={initialProduct?.size}
             />
-            {errorMessage?.size && (
-              <p className="text-sm text-red-600">{errorMessage.size}</p>
+            {validationError?.size && (
+              <p className="text-sm text-red-600">{validationError.size}</p>
             )}
           </div>
 
@@ -119,8 +125,10 @@ export default function ProductForm({
               className="w-full border rounded px-3 py-2 mb-4"
               defaultValue={initialProduct?.category}
             />
-            {errorMessage?.category && (
-              <p className="text-sm text-red-600">{errorMessage?.category}</p>
+            {validationError?.category && (
+              <p className="text-sm text-red-600">
+                {validationError?.category}
+              </p>
             )}
           </div>
         </div>
@@ -130,14 +138,14 @@ export default function ProductForm({
             initialProduct
               ? typeof initialProduct.image === 'string'
                 ? initialProduct.image
-                : typeof initialProduct.image === 'object'
-                  ? initialProduct.image.url
-                  : ''
+                : initialProduct.image instanceof File
+                  ? ''
+                  : initialProduct.image.url
               : ''
           }
           key={resetImagePreview}></ImagePreview>
-        {errorMessage?.image && (
-          <p className="text-sm text-red-600">{errorMessage?.image}</p>
+        {validationError?.image && (
+          <p className="text-sm text-red-600">{validationError?.image}</p>
         )}
 
         <Button type="submit">{isPending ? 'pending...' : 'Submit'}</Button>

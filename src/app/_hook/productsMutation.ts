@@ -1,36 +1,47 @@
 import { useMutation } from '@tanstack/react-query'
-import { createProduct, updateProduct } from '../_action/product'
+// import { createProduct, updateProduct } from '../_action/product'
 import { useQueryClient } from '@tanstack/react-query'
 import { deleteProduct } from '../_action/product'
 import { Product } from '../type/productType'
+import { ProductInput } from '../_libs/formValidateSchema'
 
 type DeleteProductArgs = { productId: string; imageId: string }
+
 export function useCreateProduct(
   initialProduct?: Product,
   setResetImagePreview?: React.Dispatch<React.SetStateAction<number>>,
   onClose?: () => void
 ) {
   const queryClient = useQueryClient()
-  return useMutation<any, Error, FormData>({
-    mutationFn: async (formData: FormData) => {
+  return useMutation<any, Error, ProductInput>({
+    mutationFn: async (values: ProductInput) => {
+      const formData = new FormData()
+      Object.entries(values).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value as any)
+        }
+      })
       if (initialProduct?.id) {
-        return await updateProduct(
-          initialProduct.id,
-          typeof initialProduct.image === 'object'
-            ? initialProduct.image.public_id
-            : '',
-          formData
-        )
-      } else {
-        console.log('Hello')
-        console.log(formData)
+        formData.append('id', initialProduct.id)
+        if (
+          typeof initialProduct.image === 'object' &&
+          !(initialProduct.image instanceof File)
+        ) {
+          formData.append('img_public_id', initialProduct.image.public_id)
+        }
         const res = await fetch('../api/products', {
-          method: 'POST',
-          body: JSON.stringify(formData),
+          method: 'PATCH',
+          body: formData,
         })
         const data = await res.json()
         return data
-        // return await createProduct(formData)
+      } else {
+        const res = await fetch('../api/products', {
+          method: 'POST',
+          body: formData,
+        })
+        const data = await res.json()
+        return data
       }
     },
     onSuccess: (data) => {

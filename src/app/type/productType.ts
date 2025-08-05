@@ -6,5 +6,5 @@ export type Product = {
   totalQuantity: string
   size: string
   category: string
-  image: string | { url: string; public_id: string }
+  image: string | { url: string; public_id: string } | File
 }

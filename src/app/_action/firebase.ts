@@ -14,8 +14,8 @@ interface Product {
 export async function sendDataToFB(product: Product) {
   console.log(product)
   try {
-    const docRef = await adminDb.collection('products').add(product)
-    console.log('Document written with ID: ', docRef.id)
+    await adminDb.collection('products').add(product)
+    return { message: 'Successs' }
   } catch (error) {
     throw new Error(
       `Error adding document: ${

@@ -5,21 +5,33 @@ import { deleteImage, saveImageFile, updateImage } from './cloudinary'
 
 import { sendDataToFB, deleteDataFromFB, updateDataFromFb } from './firebase'
 import { redirect } from 'next/navigation'
+import { strict } from 'assert'
+import { string } from 'zod'
 
-interface FormState {
-  // message: string
-  // errors: Partial<Record<keyof ProductInput, string[]>>
-  values?: Partial<ProductInput>
+// interface FormState {
+//   // message: string
+//   // errors: Partial<Record<keyof ProductInput, string[]>>
+//   values?: Partial<ProductInput>
+// }
+type Value = {
+  title: string
+  price: string
+  category: string
+  description: string
+  totalQuantity: string
+  size: string
+  image: string | File
 }
+export async function createProduct(values: Value) {
+  console.log('This is create product', values)
 
-export async function createProduct(formData: FormData): Promise<FormState> {
-  const { message, errors, values } = validateForm(formData)
+  // const { message, errors, values } = validateForm(formData)
 
-  console.log('Form validation result:', { message, errors, values })
+  // console.log('Form validation result:', { message, errors, values })
 
-  if (message === 'error') {
-    throw new Error(JSON.stringify({ validationError: errors }))
-  }
+  // if (message === 'error') {
+  //   throw new Error(JSON.stringify({ validationError: errors }))
+  // }
 
   const imageResult = await saveImageFile(values?.image as File)
 
@@ -42,24 +54,20 @@ export async function createProduct(formData: FormData): Promise<FormState> {
       category: values?.category ?? '',
     }
 
-    await sendDataToFB(newProduct)
-  }
-
-  return {
-    values,
+    try {
+      const { message } = await sendDataToFB(newProduct)
+      return message
+    } catch (error) {
+      new Error('Error')
+    }
   }
 }
 
 export async function updateProduct(
   firebaseid: string,
   imageId: string,
-  formData: FormData
-): Promise<FormState> {
-  const { message, errors, values } = validateForm(formData)
-
-  if (message === 'error') {
-    throw new Error(JSON.stringify(errors))
-  }
+  values: Value
+) {
   const newProduct = {
     ...values,
     title: values?.title ?? '',
@@ -77,12 +85,14 @@ export async function updateProduct(
       public_id: imageId,
     } as any
 
-    await updateDataFromFb({
-      firebaseId: firebaseid,
-      updatedData: newProduct,
-    })
-    return {
-      values,
+    try {
+      const { message } = await updateDataFromFb({
+        firebaseId: firebaseid,
+        updatedData: newProduct,
+      })
+      return message
+    } catch (e) {
+      new Error('Error')
     }
   }
 
@@ -103,16 +113,21 @@ export async function updateProduct(
         public_id: (imageResult as any).public_id,
       } as any
 
-      await updateDataFromFb({
-        firebaseId: firebaseid,
-        updatedData: newProduct,
-      })
+      try {
+        const { message } = await updateDataFromFb({
+          firebaseId: firebaseid,
+          updatedData: newProduct,
+        })
+        return message
+      } catch (e) {
+        new Error('Error')
+      }
     }
   }
 
-  return {
-    values,
-  }
+  // return {
+  //   values,
+  // }
 }
 
 export async function deleteProduct(productId: string, imageId: string) {
