@@ -8,6 +8,8 @@ import { Product } from '@/app/type/productType'
 // import { deleteProduct } from '@/app/_action/product'
 import { useDeleteProduct } from '@/app/_hook/productsMutation'
 import { useFetchProducts } from '@/app/_hook/fetchProducts'
+import { useState } from 'react'
+// import Modal from '../modal'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -20,7 +22,8 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table'
-import { MoreHorizontal } from 'lucide-react'
+
+import { CirclePlus, MoreHorizontal } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -41,6 +44,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import Modal from '../modal'
 
 type ProductListsTableProps = {
   setProductFormModal: (value: boolean) => void
@@ -50,7 +54,11 @@ export default function ProductListsTable({
   setProductFormModal,
   setEditProductFormModal,
 }: ProductListsTableProps) {
-  const deleteProduct = useDeleteProduct()
+  const [confirmModal, setConfirmModal] = useState<any>(false)
+  const deleteProduct = useDeleteProduct(() => {
+    setConfirmModal(false)
+  })
+  const { isPending } = deleteProduct
 
   const columns: ColumnDef<Product>[] = [
     {
@@ -131,8 +139,9 @@ export default function ProductListsTable({
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
+                className="text-red-700"
                 onClick={() =>
-                  deleteProduct.mutate({
+                  setConfirmModal({
                     productId: product.id,
                     imageId:
                       typeof product.image === 'object' &&
@@ -184,86 +193,107 @@ export default function ProductListsTable({
   }, [table])
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between py-4">
-        <Input
-          placeholder="Filter By title..."
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('title')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <Button onClick={() => setProductFormModal(true)}>
-          Add New Product
-        </Button>
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}>
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}>
-            Next
+    <>
+      <div className="w-full">
+        <div className="flex items-center justify-between py-4">
+          <Input
+            placeholder="Filter By title..."
+            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+            onChange={(event) =>
+              table.getColumn('title')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <Button onClick={() => setProductFormModal(true)}>
+            <CirclePlus></CirclePlus> Add New Product
           </Button>
         </div>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    )
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}>
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}>
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
-    </div>
+      {confirmModal && (
+        <Modal onClose={() => setConfirmModal(false)}>
+          <h3 className="text-xl font-semibold">
+            Are you sure you want to delete?
+          </h3>
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button variant="outline" onClick={() => setConfirmModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                deleteProduct.mutate(confirmModal)
+              }}
+              className="bg-black text-white">
+              {isPending ? 'Loading...' : 'Confirm'}
+            </Button>
+          </div>
+        </Modal>
+      )}
+    </>
   )
 }

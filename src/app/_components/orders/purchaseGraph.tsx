@@ -2,6 +2,9 @@
 import { Bar } from 'react-chartjs-2'
 import { useFetchOrders } from '@/app/_hook/fetchOrders'
 import { getLast7dates } from '@/app/_utils/getLast7dates'
+import { getLast7months } from '@/app/_utils/getLast7months'
+import { monthNames } from '@/app/_utils/getLast7months'
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,12 +18,18 @@ import {
 // Register chart components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-const PurchaseGraph = () => {
+const PurchaseGraph = ({ purchaseRate }: { purchaseRate: string }) => {
   const last7Dates = getLast7dates()
+  const Last7months = getLast7months()
 
   const dailyTotalPrice: { [date: string]: number } = {}
   last7Dates.forEach((date) => {
     dailyTotalPrice[date] = 0
+  })
+
+  const monthlyTotalPrice: { [month: string]: number } = {}
+  Last7months.forEach((month) => {
+    monthlyTotalPrice[month] = 0
   })
 
   interface Order {
@@ -34,18 +43,27 @@ const PurchaseGraph = () => {
   Object.values(orders || {}).forEach((order) => {
     const { date, totalPrice } = order as Order
     const orderDate = new Date(date).toISOString().split('T')[0]
+    const orderMonth = monthNames[new Date(date).getMonth()]
+
     if (last7Dates.includes(orderDate.toString())) {
       const numericPrice = parseFloat(totalPrice.replace(/[$,]/g, ''))
       dailyTotalPrice[orderDate] += numericPrice
+    }
+    if (Last7months.includes(orderMonth.toString())) {
+      const numericPrice = parseFloat(totalPrice.replace(/[$,]/g, ''))
+      monthlyTotalPrice[orderMonth] += numericPrice
     }
   })
 
   // console.log('Fetched orders:', orders)
   const graphData = {
-    labels: last7Dates,
+    labels: purchaseRate === 'Daily Purchase Rate' ? last7Dates : Last7months,
     datasets: [
       {
-        data: last7Dates.map((date) => dailyTotalPrice[date]),
+        data:
+          purchaseRate === 'Daily Purchase Rate'
+            ? last7Dates.map((date) => dailyTotalPrice[date])
+            : Last7months.map((month) => monthlyTotalPrice[month]),
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderRadius: 6,
       },

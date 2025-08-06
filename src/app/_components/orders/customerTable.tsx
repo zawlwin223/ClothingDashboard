@@ -50,8 +50,11 @@ export function CustomerListTable() {
   const [customerOrderModal, setCustomerOrderModal] = useState<Order | false>(
     false
   )
+  const [confirmModal, setConfirmModal] = useState<any>(false)
 
-  const orderDeleteMutation = useDeleteOrder()
+  const orderDeleteMutation = useDeleteOrder(() => {
+    setConfirmModal(false)
+  })
   const orderStatusMutation = useOrderStatusUpdate()
   const columns: ColumnDef<Order>[] = [
     {
@@ -137,7 +140,8 @@ export function CustomerListTable() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  orderDeleteMutation.mutate(row.original.id)
+                  setConfirmModal(row.original.id)
+                  // orderDeleteMutation.mutate(row.original.id)
                 }}>
                 <span className="text-red-700">Delete</span>
               </DropdownMenuItem>
@@ -148,6 +152,7 @@ export function CustomerListTable() {
     },
   ]
   const { data, isLoading, isError } = useFetchOrders()
+  const { isPending } = orderDeleteMutation
 
   const arrayFormData = Object.entries(data ?? {}).map(([id, data]) => ({
     id,
@@ -271,6 +276,25 @@ export function CustomerListTable() {
       {customerOrderModal && (
         <Modal onClose={() => setCustomerOrderModal(false)}>
           <CustomerOrderModal order={customerOrderModal} />
+        </Modal>
+      )}
+      {confirmModal && (
+        <Modal onClose={() => setConfirmModal(false)}>
+          <h3 className="text-xl font-semibold">
+            Are you sure you want to delete?
+          </h3>
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button variant="outline" onClick={() => setConfirmModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                orderDeleteMutation.mutate(confirmModal)
+              }}
+              className="bg-black text-white">
+              {isPending ? 'Loading...' : 'Confirm'}
+            </Button>
+          </div>
         </Modal>
       )}
     </>

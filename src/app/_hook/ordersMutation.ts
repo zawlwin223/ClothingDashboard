@@ -1,19 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getDatabase, ref, remove } from 'firebase/database'
-export function useDeleteOrder() {
+export function useDeleteOrder(onClose: () => void) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (id: string) => {
       const databaseUrl =
         process.env.NEXT_PUBLIC_DATABASE_URL + 'orders/' + id + '.json'
-      await fetch(databaseUrl, {
+      const data = await fetch(databaseUrl, {
         method: 'DELETE',
       })
+      return data
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['orders'],
       })
+      onClose()
     },
   })
 }

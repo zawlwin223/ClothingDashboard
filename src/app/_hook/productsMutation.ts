@@ -58,7 +58,7 @@ export function useCreateProduct(
   })
 }
 
-export function useDeleteProduct() {
+export function useDeleteProduct(onClose: () => void) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ productId, imageId }: DeleteProductArgs) => {
@@ -73,6 +73,7 @@ export function useDeleteProduct() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
+      onClose()
     },
   })
 }
