@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchDataFromFB } from '../_action/firebase'
+import { fetchDataFromFB } from '../_services/firebase'
 export function useFetchProducts() {
   return useQuery({
     queryKey: ['products'],

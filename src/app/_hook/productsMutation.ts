@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query'
 // import { createProduct, updateProduct } from '../_action/product'
 import { useQueryClient } from '@tanstack/react-query'
 import { deleteProduct } from '../_action/product'
-import { Product } from '../type/productType'
-import { ProductInput } from '../_libs/formValidateSchema'
+import { Product } from '../_type/productType'
+import { ProductInput } from '../_schema/formValidateSchema'
 
 type DeleteProductArgs = { productId: string; imageId: string }
 

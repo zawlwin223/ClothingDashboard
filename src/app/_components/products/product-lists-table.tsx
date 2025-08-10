@@ -2,9 +2,9 @@
 
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { fetchDataFromFB } from '@/app/_action/firebase'
+import { fetchDataFromFB } from '@/app/_services/firebase'
 import Image from 'next/image'
-import { Product } from '@/app/type/productType'
+import { Product } from '@/app/_type/productType'
 // import { deleteProduct } from '@/app/_action/product'
 import { useDeleteProduct } from '@/app/_hook/productsMutation'
 import { useFetchProducts } from '@/app/_hook/fetchProducts'
@@ -83,7 +83,7 @@ export default function ProductListsTable({
     },
     {
       accessorKey: 'title',
-      header: 'Titile',
+      header: 'Name',
       cell: ({ row }) => (
         <div className="lowercase">{row.getValue('title')}</div>
       ),
@@ -91,6 +91,10 @@ export default function ProductListsTable({
     {
       accessorKey: 'price',
       header: 'Price',
+      filterFn: (row, columnId, filterValue) => {
+        const price = row.getValue('price')
+        return String(price).includes(String(filterValue))
+      },
       cell: ({ row }) => (
         <div className="lowercase">{row.getValue('price')}</div>
       ),
@@ -195,14 +199,32 @@ export default function ProductListsTable({
   return (
     <>
       <div className="w-full">
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-end py-4">
           <Input
-            placeholder="Filter By title..."
+            placeholder="Filter By Name..."
             value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
               table.getColumn('title')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="max-w-sm bg-white"
+          />
+          <Input
+            placeholder="Filter By Price..."
+            value={(table.getColumn('price')?.getFilterValue() as string) ?? ''}
+            onChange={(event) =>
+              table.getColumn('price')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm ms-3 bg-white"
+          />
+          <Input
+            placeholder="Filter By Category..."
+            value={
+              (table.getColumn('category')?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table.getColumn('category')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm mx-3 bg-white"
           />
           <Button onClick={() => setProductFormModal(true)}>
             <CirclePlus></CirclePlus> Add New Product

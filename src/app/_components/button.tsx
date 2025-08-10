@@ -4,7 +4,7 @@ import { deleteProduct } from '../_action/product'
 import Link from 'next/link'
 
 interface ActionButtonProps {
-  id: string | number
+  id: string
   image_id?: string
   type: ActionType
   children?: React.ReactNode

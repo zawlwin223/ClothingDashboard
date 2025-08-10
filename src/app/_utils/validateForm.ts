@@ -1,7 +1,7 @@
 // validateForm.ts
 // import { console } from 'inspector'
-import { productSchema } from '../_libs/formValidateSchema'
-import { ProductInput } from '../_libs/formValidateSchema'
+import { productSchema } from '../_schema/formValidateSchema'
+import { ProductInput } from '../_schema/formValidateSchema'
 
 interface FormState {
   errors: object | boolean

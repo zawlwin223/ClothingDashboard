@@ -24,6 +24,8 @@ export function useOrderStatusUpdate() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      console.log('It works')
+      console.log({ id, status })
       const databaseUrl =
         process.env.NEXT_PUBLIC_DATABASE_URL + 'orders/' + id + '.json'
       await fetch(databaseUrl, {

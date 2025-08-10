@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 // import { fetchDataFromFB } from '../_action/firebase'
-import { fetchDataFromFB } from '@/app/_action/firebase'
+import { fetchDataFromFB } from '@/app/_services/firebase'
 import { deleteProduct } from '@/app/_action/product'
 import { createProduct } from '@/app/_action/product'
 import { updateProduct } from '@/app/_action/product'

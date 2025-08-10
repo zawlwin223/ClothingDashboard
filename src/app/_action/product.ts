@@ -1,9 +1,18 @@
 'use server'
 import { validateForm } from '../_utils/validateForm'
-import { ProductInput } from '../_libs/formValidateSchema'
-import { deleteImage, saveImageFile, updateImage } from './cloudinary'
+import { ProductInput } from '../_schema/formValidateSchema'
+import {
+  deleteImage,
+  saveImageFile,
+  updateImage,
+} from '../_services/cloudinary'
 
-import { sendDataToFB, deleteDataFromFB, updateDataFromFb } from './firebase'
+import {
+  sendDataToFB,
+  deleteDataFromFB,
+  updateDataFromFb,
+} from '../_services/firebase'
+import { Product } from '../_type/productType'
 import { redirect } from 'next/navigation'
 import { strict } from 'assert'
 import { string } from 'zod'
@@ -13,16 +22,16 @@ import { string } from 'zod'
 //   // errors: Partial<Record<keyof ProductInput, string[]>>
 //   values?: Partial<ProductInput>
 // }
-type Value = {
-  title: string
-  price: string
-  category: string
-  description: string
-  totalQuantity: string
-  size: string
-  image: string | File
-}
-export async function createProduct(values: Value) {
+// type Value = {
+//   title: string
+//   price: string
+//   category: string
+//   description: string
+//   totalQuantity: string
+//   size: string
+//   image: string | File
+// }
+export async function createProduct(values: Product) {
   console.log('This is create product', values)
 
   // const { message, errors, values } = validateForm(formData)
@@ -66,7 +75,7 @@ export async function createProduct(values: Value) {
 export async function updateProduct(
   firebaseid: string,
   imageId: string,
-  values: Value
+  values: Product
 ) {
   const newProduct = {
     ...values,

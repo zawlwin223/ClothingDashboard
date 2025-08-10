@@ -3,6 +3,13 @@
 // import * as React from 'react'
 // import { useState } from 'react'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
   ColumnDef,
   ColumnFiltersState,
   flexRender,
@@ -24,6 +31,7 @@ import { useState } from 'react'
 import CustomerOrderModal from '@/app/_components/orders/customerOrderModal'
 import Modal from '../modal'
 import { Badge } from '@/components/ui/badge'
+import { DatePicker } from '../datePicker'
 
 import {
   DropdownMenu,
@@ -44,13 +52,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { Order } from '@/app/type/orderType'
+import { Order } from '@/app/_type/orderType'
 
 export function CustomerListTable() {
   const [customerOrderModal, setCustomerOrderModal] = useState<Order | false>(
     false
   )
   const [confirmModal, setConfirmModal] = useState<any>(false)
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    undefined
+  )
 
   const orderDeleteMutation = useDeleteOrder(() => {
     setConfirmModal(false)
@@ -59,22 +70,32 @@ export function CustomerListTable() {
   const columns: ColumnDef<Order>[] = [
     {
       accessorKey: 'date',
+      id: 'date',
       header: 'Date',
+      filterFn: (row, columnId, filterValue) => {
+        if (!filterValue) return true
+        const date = row.getValue('date')
+        console.log('Order Date', date)
+        console.log('filter value', filterValue)
+        return date === filterValue
+      },
       cell: ({ row }) => (
         <div className="lowercase">{row.getValue('date')}</div>
       ),
     },
     {
       accessorKey: 'customer.fullName',
+      id: 'name',
       header: 'Name',
+      // accessorFn: (row) => row.customer.fullName,
       cell: ({ row }) => (
         <div className="lowercase">{row.original.customer.fullName}</div>
       ),
     },
     {
       accessorKey: 'customer.email',
-      id: 'customer.email',
-      accessorFn: (row) => row.customer.email,
+      id: 'email',
+      // accessorFn: (row) => row.customer.email,
 
       header: 'Email',
       cell: ({ row }) => (
@@ -98,12 +119,22 @@ export function CustomerListTable() {
     {
       accessorKey: 'status',
       header: 'Status',
+      filterFn: (row, columnId, filterValue) => {
+        if (!filterValue || filterValue === 'all') return true
+        const status = row.original.status as string | null
+        const normalized = status ? status.toLowerCase() : 'pending'
+        return normalized === filterValue
+      },
       cell: ({ row }) => (
         <div className="lowercase">
           <Badge
             variant="default"
             className={` text-white ${!row.original.status ? 'bg-yellow-500' : row.original.status === 'Shipped' ? 'bg-green-500' : 'bg-blue-500'}`}>
-            {row.original.status ? row.original.status : 'Pending'}
+            {row.original.status
+              ? row.original.status === 'Confirmed'
+                ? 'Confirmed'
+                : 'Shipped'
+              : 'Pending'}
           </Badge>
         </div>
       ),
@@ -130,6 +161,13 @@ export function CustomerListTable() {
                 View Orders
               </DropdownMenuItem>
               <DropdownMenuItem
+                disabled={
+                  row.original.status
+                    ? row.original.status !== 'Confirmed'
+                      ? true
+                      : false
+                    : true
+                }
                 onClick={() => {
                   orderStatusMutation.mutate({
                     id: row.original.id,
@@ -189,18 +227,41 @@ export function CustomerListTable() {
       <div className="w-full p-4 rounded-lg ">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter emails..."
-            value={
-              (table.getColumn('customer.email')?.getFilterValue() as string) ??
-              ''
-            }
+            placeholder="Filter By Emails..."
+            value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
-              table
-                .getColumn('customer.email')
-                ?.setFilterValue(event.target.value)
+              table.getColumn('email')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="max-w-sm bg-white"
           />
+          <Input
+            placeholder="Filter By Name..."
+            value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+            onChange={(event) =>
+              table.getColumn('name')?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm bg-white ms-3"
+          />
+          <Select
+            onValueChange={(value) =>
+              table.getColumn('status')?.setFilterValue(value || undefined)
+            }>
+            <SelectTrigger className="w-[180px] bg-white ms-3">
+              <SelectValue placeholder="Filter By Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={'all'}>All</SelectItem>
+              <SelectItem value={'pending'}>pending</SelectItem>
+              <SelectItem value="confirmed">confirmed</SelectItem>
+              <SelectItem value="shipped">shipped</SelectItem>
+            </SelectContent>
+          </Select>
+          <DatePicker
+            onChange={(date: Date | undefined) => {
+              const isoString = date && date.toISOString()
+              const filterDate = isoString?.substring(0, isoString.indexOf('T'))
+              table.getColumn('date')?.setFilterValue(filterDate || undefined)
+            }}></DatePicker>
         </div>
         <div className="rounded-md border">
           <Table>
@@ -275,7 +336,13 @@ export function CustomerListTable() {
       </div>
       {customerOrderModal && (
         <Modal onClose={() => setCustomerOrderModal(false)}>
-          <CustomerOrderModal order={customerOrderModal} />
+          <CustomerOrderModal
+            setOrderConfirmed={(id) =>
+              orderStatusMutation.mutate({ id, status: 'Confirmed' })
+            }
+            onClose={() => setCustomerOrderModal(false)}
+            order={customerOrderModal}
+          />
         </Modal>
       )}
       {confirmModal && (

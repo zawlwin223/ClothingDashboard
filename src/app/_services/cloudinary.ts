@@ -1,10 +1,6 @@
 'use server'
 import cloudinary from '../_libs/cloudinary'
 
-interface DeleteImageParams {
-  imageId: string
-}
-
 export async function saveImageFile(file: File) {
   const fileBuffer = Buffer.from(await file.arrayBuffer())
   try {
@@ -22,9 +18,7 @@ export async function saveImageFile(file: File) {
   }
 }
 
-export async function deleteImage(
-  imageId: DeleteImageParams['imageId']
-): Promise<void> {
+export async function deleteImage(imageId: string): Promise<void> {
   console.log('Deleting image with ID:', imageId)
   // await deleteFileFromPublic(imageId)
   try {

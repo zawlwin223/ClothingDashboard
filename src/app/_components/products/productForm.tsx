@@ -4,10 +4,10 @@ import ImagePreview from './imagePreview'
 import { useState } from 'react'
 
 import { useCreateProduct } from '@/app/_hook/productsMutation'
-import { Product } from '@/app/type/productType'
+import { Product } from '@/app/_type/productType'
 import { Button } from '@/components/ui/button'
 import { validateForm } from '@/app/_utils/validateForm'
-import { ProductInput } from '@/app/_libs/formValidateSchema'
+import { ProductInput } from '@/app/_schema/formValidateSchema'
 import { error } from 'console'
 // import { string } from 'zod'
 

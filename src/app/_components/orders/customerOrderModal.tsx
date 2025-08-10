@@ -1,8 +1,26 @@
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { Order } from '@/app/type/orderType'
+import { Order } from '@/app/_type/orderType'
+import { useSendEmail } from '@/app/_hook/sendEmail'
 
-export default function CustomerOrderModal({ order }: { order: Order }) {
+export default function CustomerOrderModal({
+  order,
+  onClose,
+  setOrderConfirmed,
+}: {
+  order: Order
+  onClose: () => void
+  setOrderConfirmed: (id: string) => void
+}) {
+  const confirmedData = {
+    name: order.customer.fullName,
+    email: order.customer.email,
+    order: order.items,
+  }
+
+  const sendEmail = useSendEmail(order.id, onClose, setOrderConfirmed)
+  const { isPending } = sendEmail
+
   return (
     <div className="w-full h-full flex flex-col">
       <div className="pb-3">
@@ -53,7 +71,11 @@ export default function CustomerOrderModal({ order }: { order: Order }) {
 
       {/* Button always at the bottom */}
       <div className="mt-5">
-        <Button className="w-full">Send Confirmed Email</Button>
+        <Button
+          onClick={() => sendEmail.mutate(confirmedData)}
+          className="w-full">
+          {isPending ? 'Sending...' : 'Send Confirmed Email'}
+        </Button>
       </div>
     </div>
   )
