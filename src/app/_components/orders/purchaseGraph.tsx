@@ -18,7 +18,7 @@ import {
 // Register chart components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-const PurchaseGraph = ({ purchaseRate }: { purchaseRate: string }) => {
+const PurchaseGraph = ({ purchaseRate }: { purchaseRate: string | null }) => {
   const last7Dates = getLast7dates()
   const Last7months = getLast7months()
 

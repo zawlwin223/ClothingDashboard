@@ -37,6 +37,8 @@ export default function ProductForm({
     e.preventDefault()
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
+
+    console.log(formData)
     const { errors, values } = validateForm(formData)
     console.log(errors)
     if (errors) {
@@ -105,14 +107,34 @@ export default function ProductForm({
           </div>
         </div>
 
-        <div className="w-full flex ">
-          <div className="flex flex-col me-4">
-            <input
-              name="size"
-              placeholder="Size (e.g. S, M, L, XL)"
-              className="w-full border rounded px-3 py-2 mb-4 me-4"
-              defaultValue={initialProduct?.size}
-            />
+        <div className="w-full ">
+          <div className="w-full my-3 px-2 justify-between flex me-4">
+            <label
+              className="flex flex-col justify-center items-center"
+              htmlFor="">
+              <input type="checkbox" name="size" value="S" />
+              Small
+            </label>
+            <label
+              className="flex flex-col justify-center items-center"
+              htmlFor="">
+              <input className="mx-5" type="checkbox" name="size" value="M" />
+              Medium
+            </label>
+
+            <label
+              className="flex flex-col justify-center items-center"
+              htmlFor="">
+              <input type="checkbox" name="size" value="L" />
+              Large
+            </label>
+            <label
+              className="flex flex-col justify-center items-center"
+              htmlFor="">
+              <input className="mx-5" type="checkbox" name="size" value="M" />
+              Extra Large
+            </label>
+
             {validationError?.size && (
               <p className="text-sm text-red-600">{validationError.size}</p>
             )}
