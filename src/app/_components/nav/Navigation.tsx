@@ -1,6 +1,7 @@
 'use client'
 
 import { Calendar, Home, Inbox, SquareActivity } from 'lucide-react'
+import { Package, ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import {
   Sidebar,
@@ -23,12 +24,12 @@ const items = [
   {
     title: 'Products',
     url: '/products',
-    icon: Inbox,
+    icon: Package,
   },
   {
     title: 'Orders',
     url: '/orders',
-    icon: Calendar,
+    icon: ShoppingCart,
   },
   {
     title: 'Purchase Rate',

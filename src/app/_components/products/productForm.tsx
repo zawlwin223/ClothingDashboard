@@ -37,6 +37,7 @@ export default function ProductForm({
     e.preventDefault()
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
+    console.log(formData)
 
     console.log(formData)
     const { errors, values } = validateForm(formData)
@@ -134,11 +135,10 @@ export default function ProductForm({
               <input className="mx-5" type="checkbox" name="size" value="M" />
               Extra Large
             </label>
-
-            {validationError?.size && (
-              <p className="text-sm text-red-600">{validationError.size}</p>
-            )}
           </div>
+          {validationError?.size && (
+            <p className="text-sm text-red-600">{validationError.size}</p>
+          )}
 
           <div className="flex flex-col">
             <input

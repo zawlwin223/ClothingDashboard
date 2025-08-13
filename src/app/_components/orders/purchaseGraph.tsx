@@ -72,6 +72,7 @@ const PurchaseGraph = ({ purchaseRate }: { purchaseRate: string | null }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
 
     plugins: {
       // borderWidth: 2,

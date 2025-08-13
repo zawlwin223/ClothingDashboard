@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import PurchaseGraph from '../_components/orders/purchaseGraph'
+import { Card } from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,10 +15,10 @@ import { ChevronDown } from 'lucide-react'
 export default function PurchaseRate() {
   const [purchaseRate, setPurchaseRate] = useState('Daily Purchase Rate')
   return (
-    <>
-      <div className="px-9 py-5 mt-2">
+    <div className="p-8 ">
+      <Card className="px-9 py-5 mt-2">
         <div className="w-full flex justify-between items-center">
-          <h1 className="font-bold  text-[30px] mb-5">Purchase Rate</h1>
+          <h1 className="font-bold  text-[30px] mb-5 ms-3">Purchase Rate</h1>
           <DropdownMenu>
             <DropdownMenuTrigger className="bg-black text-white w-[250px] px-3 flex items-center justify-around h-[40px] rounded-[5px]">
               {purchaseRate}
@@ -35,8 +36,10 @@ export default function PurchaseRate() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <PurchaseGraph purchaseRate={purchaseRate}></PurchaseGraph>
-      </div>
-    </>
+        <div className="h-[450px] ">
+          <PurchaseGraph purchaseRate={purchaseRate}></PurchaseGraph>
+        </div>
+      </Card>
+    </div>
   )
 }

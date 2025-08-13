@@ -10,6 +10,7 @@ import ProductForm from '../_components/products/productForm'
 // Import the Product type
 // import type { Product } from '../_components/products/product-lists-table'
 import { Product } from '../_type/productType'
+import { Card } from '@/components/ui/card'
 
 export default function Products() {
   const [addProductFormModal, setAddProductFormModal] = useState(false)
@@ -17,17 +18,19 @@ export default function Products() {
     useState<Product | null>(null)
   return (
     <div className="w-full p-8 mt-2 relative">
-      <div className="flex justify-between mb-6 items-center ">
-        <h1 className="font-bold  text-[30px]">Product Management</h1>
-      </div>
-      <Suspense fallback={<div>Loading products...</div>}>
-        <ProductListsTable
-          setProductFormModal={(booleanData) =>
-            setAddProductFormModal(booleanData)
-          }
-          setEditProductFormModal={(data) => setEditProductFormModal(data)}
-        />
-      </Suspense>
+      <Card className="px-9 gap-0">
+        <div className="flex justify-between items-center ">
+          <h1 className="font-bold  text-[30px]">Product Management</h1>
+        </div>
+        <Suspense fallback={<div>Loading products...</div>}>
+          <ProductListsTable
+            setProductFormModal={(booleanData) =>
+              setAddProductFormModal(booleanData)
+            }
+            setEditProductFormModal={(data) => setEditProductFormModal(data)}
+          />
+        </Suspense>
+      </Card>
       {addProductFormModal && (
         <Modal onClose={() => setAddProductFormModal(false)}>
           <ProductForm

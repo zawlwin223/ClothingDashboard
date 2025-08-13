@@ -32,7 +32,7 @@ export function validateForm(formData: FormData): FormState {
     description: formData.get('description'),
     price: formData.get('price'),
     totalQuantity: formData.get('totalQuantity'),
-    size: formData.get('size'),
+    size: formData.getAll('size').map(String),
     category: formData.get('category'),
     image: image,
   }
@@ -44,15 +44,15 @@ export function validateForm(formData: FormData): FormState {
   if (!result.success) {
     return {
       errors: result.error.flatten().fieldErrors,
-      values: {
-        title: String(raw.title || ''),
-        description: String(raw.description || ''),
-        price: String(raw.price || ''),
-        totalQuantity: String(raw.totalQuantity || ''),
-        size: String(raw.size || ''),
-        category: String(raw.category || ''),
-        image: raw.image instanceof File ? raw.image : undefined,
-      },
+      // values: {
+      //   title: String(raw.title || ''),
+      //   description: String(raw.description || ''),
+      //   price: String(raw.price || ''),
+      //   totalQuantity: String(raw.totalQuantity || ''),
+      //   size: String(raw.size || ''),
+      //   category: String(raw.category || ''),
+      //   image: raw.image instanceof File ? raw.image : undefined,
+      // },
     }
   }
 

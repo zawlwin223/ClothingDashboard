@@ -9,7 +9,7 @@ type Customer = {
   // date: string
 }
 
-type OrderItem = {
+export type OrderItem = {
   id: string
   title?: string
   price: number

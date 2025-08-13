@@ -225,7 +225,7 @@ export function CustomerListTable() {
   return (
     <>
       <div className="w-full p-4 rounded-lg ">
-        <div className="flex items-center py-4">
+        <div className="flex items-center pb-4">
           <Input
             placeholder="Filter By Emails..."
             value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
