@@ -79,7 +79,7 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
-            ${totalRevenue}
+            {orderLoading && <p>Loading</p>}${totalRevenue}
           </h1>
         </Card>
         <Card className="gap-0 ms-3 px-4 flex-1/2">
@@ -92,6 +92,7 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
+            {productLoading && <p>Loading</p>}
             {totalProducts}
           </h1>
         </Card>
@@ -105,6 +106,7 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
+            {orderLoading && <p>Loading</p>}
             {totalOrders}
           </h1>
         </Card>
@@ -118,6 +120,7 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
+            {orderLoading && <p>Loading</p>}
             {totalCustomers}
           </h1>
         </Card>

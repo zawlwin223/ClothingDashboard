@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { redirectTo } from '../_utils/redirect'
 import { useState } from 'react'
+import { Card } from '@/components/ui/card'
 
 export default function Login() {
   const [error, setError] = useState<String>()
@@ -46,15 +47,22 @@ export default function Login() {
   }
 
   return (
-    <div className="w-[500px]">
+    <Card className="w-[500px] p-5 gap-0">
+      <h1 className="text-center font-bold text-[20px] mb-2">Login</h1>
       <form onSubmit={handleSubmit}>
         {error && <p className="text-red-700">{error}</p>}
-        <Input type="email" name="email" required />
-        <Input type="password" name="password" className="my-3" required />
-        <Button type="submit" disabled={mutation.isPending}>
+        <Input type="email" name="email" placeholder="Enter Email" required />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Enter Password"
+          className="my-3"
+          required
+        />
+        <Button type="submit" className="w-full" disabled={mutation.isPending}>
           {mutation.isPending ? 'Logging in...' : 'Login'}
         </Button>
       </form>
-    </div>
+    </Card>
   )
 }

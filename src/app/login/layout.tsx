@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.className}>
       <body className="flex">
-        <main className="h-screen pt-5 flex-5 scrollbar-hide bg-gray-100  overflow-y-scroll">
+        <main className="h-screen  w-full flex items-center justify-center pt-5 flex-5 scrollbar-hide bg-black  overflow-y-scroll">
           <Providers>{children}</Providers>
         </main>
       </body>
