@@ -6,6 +6,8 @@ const adminCredentials = {
   privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
 }
 
+console.log(adminCredentials)
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(adminCredentials),
@@ -13,6 +15,8 @@ if (!admin.apps.length) {
   })
 }
 
-export const adminDb = admin.firestore()
+// export const adminDb = admin.firestore()
+// export const adminAuth = admin.auth()
 
 // export const adminRealTimeDb = getDatabase(adminDb.apps)
+export const adminFB = admin

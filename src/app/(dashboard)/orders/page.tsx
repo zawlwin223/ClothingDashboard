@@ -1,6 +1,6 @@
 // import { fetchOrders } from '../_utils/firebase'
 import { Car } from 'lucide-react'
-import { CustomerListTable } from '../_components/orders/customerTable'
+import { CustomerListTable } from '@/app/_components/orders/customerTable'
 import { Card } from '@/components/ui/card'
 export default async function Dashboard() {
   // const orders = await fetchOrders()

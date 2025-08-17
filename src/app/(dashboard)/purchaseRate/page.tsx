@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import PurchaseGraph from '../_components/orders/purchaseGraph'
+import PurchaseGraph from '../../_components/orders/purchaseGraph'
 import { Card } from '@/components/ui/card'
 import {
   DropdownMenu,

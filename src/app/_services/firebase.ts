@@ -1,6 +1,8 @@
 'use server'
-import { adminDb } from '@/app/_libs/fireBaseAdmin'
-import { getDatabase } from 'firebase-admin/database'
+import { adminFB } from '@/app/_libs/fireBaseAdmin'
+
+const adminDb = adminFB.firestore()
+const adminAuth = adminFB.auth()
 
 interface Product {
   title: string
@@ -42,24 +44,6 @@ export async function fetchDataFromFB() {
   }
 }
 
-// export async function getDataFromFB(id: string) {
-//   console.log('Fetching data for ID:', id)
-//   try {
-//     const docRef = adminDb.collection('products').doc(id)
-//     const doc = await docRef.get()
-//     if (!doc.exists) {
-//       throw new Error(`No document found with ID: ${id}`)
-//     }
-//     return { id: doc.id, ...doc.data() }
-//   } catch (error) {
-//     throw new Error(
-//       `Error fetching document: ${
-//         error instanceof Error ? error.message : 'Unknown error'
-//       }`
-//     )
-//   }
-// }
-
 export async function deleteDataFromFB(productId: string) {
   try {
     await adminDb.collection('products').doc(productId).delete()
@@ -89,11 +73,14 @@ export async function updateDataFromFb({
   }
 }
 
-// async function deleteOrderFromFb() {
-//   try {
-//     const db = getDatabase()
-//     await db.ref('').remove()
-//   } catch (error: unknown) {
-//     return new Error(error instanceof Error ? error.message : 'Unknown error')
-//   }
-// }
+export async function signUpAdmin() {
+  const user = await adminAuth.createUser({
+    email: 'admin@example.com',
+    password: 'superSecurePassword123',
+  })
+
+  // // Give them admin privileges
+  // await adminAuth.setCustomUserClaims(user.uid, { admin: true })
+
+  return { message: 'Admin created', uid: user.uid }
+}

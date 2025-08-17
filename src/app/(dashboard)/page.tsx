@@ -1,16 +1,16 @@
 'use client'
 import Link from 'next/link'
-import PurchaseGraph from './_components/orders/purchaseGraph'
+// import PurchaseGraph from './_components/orders/purchaseGraph'
 import { Button } from '@/components/ui/button'
 import { ShoppingCart, Package } from 'lucide-react'
 import { DollarSign } from 'lucide-react'
 import { Users } from 'lucide-react'
-
+import PurchaseGraph from '../_components/orders/purchaseGraph'
 import { Card, CardTitle } from '@/components/ui/card'
-import { useFetchProducts } from './_hook/fetchProducts'
-import { Product } from './_type/productType'
-import { useFetchOrders } from './_hook/fetchOrders'
-import { Order, OrderItem } from './_type/orderType'
+import { useFetchProducts } from '../_hook/fetchProducts'
+import { Product } from '../_type/productType'
+import { useFetchOrders } from '../_hook/fetchOrders'
+import { Order, OrderItem } from '../_type/orderType'
 
 export default function Home() {
   const {
@@ -24,12 +24,6 @@ export default function Home() {
     error: orderError,
   } = useFetchOrders()
 
-  const totalProducts = products?.reduce(
-    (accmulator: number, product: Product) =>
-      product.totalQuantity + accmulator,
-    0
-  )
-
   if (productLoading) {
     return <p>Loading...</p>
   }
@@ -37,6 +31,12 @@ export default function Home() {
   if (orderLoading) {
     return <p>Loading</p>
   }
+
+  const totalProducts = products?.reduce(
+    (accmulator: number, product: Product) =>
+      product.totalQuantity + accmulator,
+    0
+  )
 
   const totalCustomers = orders && Object.values(orders).length
   const totalOrders = Object.values(orders as Record<string, Order>).reduce(

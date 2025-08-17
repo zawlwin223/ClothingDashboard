@@ -1,15 +1,15 @@
 'use client' // import ProductLists from '../_components/products/product-lists-table'
-import { Providers } from '../providers'
+// import { Providers } from '../providers'
 import { Suspense } from 'react'
 // import { fetchOrders } from '../_utils/firebase'
 import { Button } from '@/components/ui/button'
-import ProductListsTable from '../_components/products/product-lists-table'
+import ProductListsTable from '@/app/_components/products/product-lists-table'
 import { useState } from 'react'
-import Modal from '../_components/modal'
-import ProductForm from '../_components/products/productForm'
+import Modal from '@/app/_components/modal'
+import ProductForm from '@/app/_components/products/productForm'
 // Import the Product type
 // import type { Product } from '../_components/products/product-lists-table'
-import { Product } from '../_type/productType'
+import { Product } from '@/app/_type/productType'
 import { Card } from '@/components/ui/card'
 
 export default function Products() {
