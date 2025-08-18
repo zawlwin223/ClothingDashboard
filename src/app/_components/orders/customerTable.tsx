@@ -1,7 +1,4 @@
 'use client'
-
-// import * as React from 'react'
-// import { useState } from 'react'
 import {
   Select,
   SelectContent,
@@ -21,13 +18,13 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table'
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
 import { useFetchOrders } from '@/app/_hook/fetchOrders'
 import { useDeleteOrder } from '@/app/_hook/ordersMutation'
 import { useOrderStatusUpdate } from '@/app/_hook/ordersMutation'
 
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CustomerOrderModal from '@/app/_components/orders/customerOrderModal'
 import Modal from '../modal'
 import { Badge } from '@/components/ui/badge'
@@ -35,7 +32,6 @@ import { DatePicker } from '../datePicker'
 
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -59,9 +55,6 @@ export function CustomerListTable() {
     false
   )
   const [confirmModal, setConfirmModal] = useState<any>(false)
-  const [selectedDate, setSelectedDate] = useState<string | undefined>(
-    undefined
-  )
 
   const orderDeleteMutation = useDeleteOrder(() => {
     setConfirmModal(false)
@@ -221,6 +214,10 @@ export function CustomerListTable() {
     },
     autoResetPageIndex: false,
   })
+
+  useEffect(() => {
+    table.setPageSize(5)
+  }, [table])
 
   return (
     <>

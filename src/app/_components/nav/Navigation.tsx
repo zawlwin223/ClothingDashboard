@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, Home, Inbox, SquareActivity } from 'lucide-react'
+import { Home, SquareActivity } from 'lucide-react'
 import { Package, ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import {
@@ -51,7 +51,7 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem className="py-3" key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url}>
+                    <Link href={item.url} prefetch>
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>

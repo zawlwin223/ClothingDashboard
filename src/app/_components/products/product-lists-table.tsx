@@ -1,15 +1,9 @@
 'use client'
-
-import * as React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchDataFromFB } from '@/app/_services/firebase'
 import Image from 'next/image'
 import { Product } from '@/app/_type/productType'
-// import { deleteProduct } from '@/app/_action/product'
 import { useDeleteProduct } from '@/app/_hook/productsMutation'
 import { useFetchProducts } from '@/app/_hook/fetchProducts'
-import { useState } from 'react'
-// import Modal from '../modal'
+import { useState, useEffect } from 'react'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -32,7 +26,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -149,7 +142,8 @@ export default function ProductListsTable({
                     productId: product.id,
                     imageId:
                       typeof product.image === 'object' &&
-                      product.image !== null
+                      product.image !== null &&
+                      'public_id' in product.image
                         ? product.image.public_id
                         : '',
                   })
@@ -165,13 +159,10 @@ export default function ProductListsTable({
 
   const { data: products = [], isLoading, error } = useFetchProducts()
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data: products as Product[],
@@ -192,7 +183,7 @@ export default function ProductListsTable({
     },
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     table.setPageSize(5)
   }, [table])
 

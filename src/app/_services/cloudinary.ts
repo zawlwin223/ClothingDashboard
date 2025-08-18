@@ -19,15 +19,12 @@ export async function saveImageFile(file: File) {
 }
 
 export async function deleteImage(imageId: string): Promise<void> {
-  console.log('Deleting image with ID:', imageId)
-  // await deleteFileFromPublic(imageId)
   try {
     const res = await cloudinary.uploader.destroy(imageId)
     if (res.result !== 'ok') {
       throw new Error(`Failed to delete image with ID ${imageId}`)
     }
   } catch (error) {
-    console.error('Error deleting image:', error)
     throw new Error(
       `Failed to delete image with ID ${imageId}: ${
         error instanceof Error ? error.message : 'Unknown error'
@@ -43,7 +40,6 @@ export async function updateImage({
   file: File
   imageId: string
 }) {
-  // await deleteFileFromPublic(imageId)
   await deleteImage(imageId)
   const result = await saveImageFile(file)
   return result

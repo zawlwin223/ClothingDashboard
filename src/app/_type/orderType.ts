@@ -6,7 +6,6 @@ type Customer = {
   state: string
   zipCode: string
   country: string
-  // date: string
 }
 
 export type OrderItem = {
@@ -28,18 +27,4 @@ export interface Order {
   items: OrderItem[]
   totalPrice: string
   status?: string
-}
-
-type User = {
-  name: string
-  age: number
-}
-
-type UserSummary = Pick<User, 'name' | 'age'>
-
-type RecordTest = Record<string, string>
-
-const test: RecordTest = {
-  name: 'Zaw Lwin Phyo',
-  job: 'web developer',
 }

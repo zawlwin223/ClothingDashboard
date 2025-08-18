@@ -1,15 +1,11 @@
 'use client'
 import ImagePreview from './imagePreview'
-
 import { useState } from 'react'
-
 import { useCreateProduct } from '@/app/_hook/productsMutation'
 import { Product } from '@/app/_type/productType'
 import { Button } from '@/components/ui/button'
 import { validateForm } from '@/app/_utils/validateForm'
 import { ProductInput } from '@/app/_schema/formValidateSchema'
-import { error } from 'console'
-// import { string } from 'zod'
 
 interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
 
@@ -37,11 +33,8 @@ export default function ProductForm({
     e.preventDefault()
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
-    console.log(formData)
-
-    console.log(formData)
     const { errors, values } = validateForm(formData)
-    console.log(errors)
+
     if (errors) {
       setValidationError(errors)
       return
@@ -72,8 +65,6 @@ export default function ProductForm({
           placeholder="Description"
           className="w-full border rounded px-3 py-2 mb-4"
           defaultValue={initialProduct?.description}
-          // rows:string="5"
-          // cols:string="33"
         />
         {validationError?.description && (
           <p className="text-sm text-red-600">{validationError.description}</p>

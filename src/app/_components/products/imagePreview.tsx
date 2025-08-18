@@ -47,7 +47,6 @@ export default function ImagePreview({ initialImg = '' }: ImagePreviewProps) {
 
         {imagePreview && (
           <div className="mt-4">
-            {/* <p className="mb-1 text-sm text-gray-500">Image Preview:</p> */}
             <img
               src={imagePreview}
               alt="Preview"

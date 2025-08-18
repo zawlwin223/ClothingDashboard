@@ -1,18 +1,25 @@
 'use client'
 import Link from 'next/link'
-// import PurchaseGraph from './_components/orders/purchaseGraph'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, Package } from 'lucide-react'
-import { DollarSign } from 'lucide-react'
-import { Users } from 'lucide-react'
+import { ShoppingCart, Package, DollarSign, Users } from 'lucide-react'
 import PurchaseGraph from '../_components/orders/purchaseGraph'
 import { Card, CardTitle } from '@/components/ui/card'
 import { useFetchProducts } from '../_hook/fetchProducts'
 import { Product } from '../_type/productType'
 import { useFetchOrders } from '../_hook/fetchOrders'
 import { Order, OrderItem } from '../_type/orderType'
+import { useState } from 'react'
+import { useEffect } from 'react'
+import { TailChase } from 'ldrs/react'
+import 'ldrs/react/TailChase.css'
 
 export default function Home() {
+  const [dashboardData, setDashboardData] = useState<any>({
+    totalProducts: 0,
+    totalCustomers: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+  })
   const {
     data: products,
     isLoading: productLoading,
@@ -24,46 +31,47 @@ export default function Home() {
     error: orderError,
   } = useFetchOrders()
 
-  if (productLoading) {
-    return <p>Loading...</p>
-  }
-
-  if (orderLoading) {
-    return <p>Loading</p>
-  }
-
-  const totalProducts = products?.reduce(
-    (accmulator: number, product: Product) =>
-      product.totalQuantity + accmulator,
-    0
-  )
-
-  const totalCustomers = orders && Object.values(orders).length
-  const totalOrders = Object.values(orders as Record<string, Order>).reduce(
-    (sum: number, order) => {
-      return (
-        sum +
-        order.items.reduce(
-          (itemSum: number, item: OrderItem) => itemSum + item.quantity,
-          0
-        )
+  useEffect(() => {
+    if (!productLoading && !orderLoading) {
+      const totalProducts = products?.reduce(
+        (accmulator: number, product: Product) =>
+          product.totalQuantity + accmulator,
+        0
       )
-    },
-    0
-  )
-  const totalRevenue = Object.values(orders as Record<string, Order>).reduce(
-    (sum: number, order) => {
-      return (
-        sum +
-        order.items.reduce(
-          (itemSum: number, item: OrderItem) =>
-            itemSum + item.quantity * item.price,
-          0
-        )
+      const totalCustomers = orders && Object.values(orders).length
+      const totalOrders = Object.values(orders as Record<string, Order>).reduce(
+        (sum: number, order) => {
+          return (
+            sum +
+            order.items.reduce(
+              (itemSum: number, item: OrderItem) => itemSum + item.quantity,
+              0
+            )
+          )
+        },
+        0
       )
-    },
-    0
-  )
+      const totalRevenue = Object.values(
+        orders as Record<string, Order>
+      ).reduce((sum: number, order) => {
+        return (
+          sum +
+          order.items.reduce(
+            (itemSum: number, item: OrderItem) =>
+              itemSum + item.quantity * item.price,
+            0
+          )
+        )
+      }, 0)
+      const dashboardDataObject = {
+        totalCustomers,
+        totalOrders,
+        totalRevenue,
+        totalProducts,
+      }
+      setDashboardData(dashboardDataObject)
+    }
+  }, [productLoading, orderLoading, products, orders])
 
   return (
     <div className="w-full p-8 ">
@@ -79,7 +87,11 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
-            {orderLoading && <p>Loading</p>}${totalRevenue}
+            {orderLoading || dashboardData.totalRevenue === 0 ? (
+              <TailChase size={20}></TailChase>
+            ) : (
+              dashboardData.totalRevenue
+            )}
           </h1>
         </Card>
         <Card className="gap-0 ms-3 px-4 flex-1/2">
@@ -92,8 +104,11 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
-            {productLoading && <p>Loading</p>}
-            {totalProducts}
+            {productLoading || dashboardData.totalProducts === 0 ? (
+              <TailChase size={20}></TailChase>
+            ) : (
+              dashboardData.totalProducts
+            )}
           </h1>
         </Card>
         <Card className="gap-0 ms-3 px-4 flex-1/2">
@@ -106,8 +121,11 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
-            {orderLoading && <p>Loading</p>}
-            {totalOrders}
+            {orderLoading || dashboardData.totalOrders === 0 ? (
+              <TailChase size={20}></TailChase>
+            ) : (
+              dashboardData.totalOrders
+            )}
           </h1>
         </Card>
         <Card className="gap-0 px-4 flex-1/2 ms-3">
@@ -120,13 +138,15 @@ export default function Home() {
           <h1
             className="font-bold text-[25px] my-3
           ">
-            {orderLoading && <p>Loading</p>}
-            {totalCustomers}
+            {orderLoading || dashboardData.totalCustomers === 0 ? (
+              <TailChase size={20}></TailChase>
+            ) : (
+              dashboardData.totalCustomers
+            )}
           </h1>
         </Card>
       </div>
       <div className="flex justify-between  ">
-        {/* <div className="w-[850px] h-[500px]  border p-5"> */}
         <Card className="w-[850px]   border p-5">
           <CardTitle className="font-bold text-[20px] mb-3">
             Monthly Purchase Rate

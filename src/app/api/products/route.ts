@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-// import { fetchDataFromFB } from '../_action/firebase'
+
 import { fetchDataFromFB } from '@/app/_services/firebase'
 import { deleteProduct } from '@/app/_action/product'
 import { createProduct } from '@/app/_action/product'
@@ -43,7 +43,6 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  console.log('This is update product')
   const formData = await request.formData()
   const title = formData.get('title') as string
   const category = formData.get('category') as string
@@ -56,8 +55,6 @@ export async function PATCH(request: NextRequest) {
   const initialProductId = formData.get('id') as string
   const initialProductImage = formData.get('img_public_id') as string
 
-  console.log(initialProductId, initialProductImage)
-
   const data = {
     title,
     description,
@@ -67,7 +64,7 @@ export async function PATCH(request: NextRequest) {
     image,
     category,
   }
-  console.log(data)
+
   try {
     const result = await updateProduct(
       initialProductId,
@@ -83,10 +80,10 @@ export async function DELETE(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const productId = String(searchParams.get('productId'))
   const imageId = String(searchParams.get('imageId'))
-  console.log(productId, imageId)
+
   try {
     const res = await deleteProduct(productId, imageId)
-    console.log(res)
+
     return Response.json(res)
   } catch (e) {
     throw new Response('Error')

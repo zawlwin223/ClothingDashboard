@@ -14,7 +14,6 @@ interface Product {
   image: object
 }
 export async function sendDataToFB(product: Product) {
-  console.log(product)
   try {
     await adminDb.collection('products').add(product)
     return { message: 'Successs' }
@@ -47,7 +46,6 @@ export async function fetchDataFromFB() {
 export async function deleteDataFromFB(productId: string) {
   try {
     await adminDb.collection('products').doc(productId).delete()
-    console.log(`Document with ID ${productId} deleted successfully`)
   } catch (error) {
     throw new Error(
       `Error deleting document: ${
@@ -78,9 +76,6 @@ export async function signUpAdmin() {
     email: 'admin@example.com',
     password: 'superSecurePassword123',
   })
-
-  // // Give them admin privileges
-  // await adminAuth.setCustomUserClaims(user.uid, { admin: true })
 
   return { message: 'Admin created', uid: user.uid }
 }

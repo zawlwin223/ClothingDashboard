@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json()
-    console.log(email, password)
 
     if (!email || !password) {
       return NextResponse.json(
@@ -35,8 +34,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
-
-    console.log(data)
 
     // Store ID token in HTTP-only cookie
     const response = NextResponse.json({ success: true })

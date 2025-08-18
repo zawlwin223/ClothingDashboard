@@ -1,8 +1,6 @@
 'use client'
 
 import { X } from 'lucide-react'
-import { useState } from 'react'
-
 import { ReactNode } from 'react'
 
 export default function Modal({
@@ -12,8 +10,6 @@ export default function Modal({
   children: ReactNode
   onClose: () => void
 }) {
-  //   const [isOpen, setIsOpen] = useState(false)
-
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center ">
@@ -29,7 +25,6 @@ export default function Modal({
           </button>
           {children}
         </div>
-        {/* {children} */}
       </div>
     </>
   )

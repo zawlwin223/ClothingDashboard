@@ -1,6 +1,4 @@
 'use server'
-import { validateForm } from '../_utils/validateForm'
-import { ProductInput } from '../_schema/formValidateSchema'
 import {
   deleteImage,
   saveImageFile,
@@ -13,35 +11,7 @@ import {
   updateDataFromFb,
 } from '../_services/firebase'
 import { Product } from '../_type/productType'
-import { redirect } from 'next/navigation'
-import { strict } from 'assert'
-import { string } from 'zod'
-
-// interface FormState {
-//   // message: string
-//   // errors: Partial<Record<keyof ProductInput, string[]>>
-//   values?: Partial<ProductInput>
-// }
-// type Value = {
-//   title: string
-//   price: string
-//   category: string
-//   description: string
-//   totalQuantity: string
-//   size: string
-//   image: string | File
-// }
 export async function createProduct(values: Product) {
-  console.log('This is create product', values)
-
-  // const { message, errors, values } = validateForm(formData)
-
-  // console.log('Form validation result:', { message, errors, values })
-
-  // if (message === 'error') {
-  //   throw new Error(JSON.stringify({ validationError: errors }))
-  // }
-
   const imageResult = await saveImageFile(values?.image as File)
 
   if (
@@ -133,15 +103,10 @@ export async function updateProduct(
       }
     }
   }
-
-  // return {
-  //   values,
-  // }
 }
 
 export async function deleteProduct(productId: string, imageId: string) {
   await deleteImage(imageId)
   await deleteDataFromFB(productId)
   return { message: 'Delete Success' }
-  // redirect('/products')
 }

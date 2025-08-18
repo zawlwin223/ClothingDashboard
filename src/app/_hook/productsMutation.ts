@@ -1,7 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-// import { createProduct, updateProduct } from '../_action/product'
 import { useQueryClient } from '@tanstack/react-query'
-import { deleteProduct } from '../_action/product'
 import { Product } from '../_type/productType'
 import { ProductInput } from '../_schema/formValidateSchema'
 

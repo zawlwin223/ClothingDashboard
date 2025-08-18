@@ -82,7 +82,6 @@ const PurchaseGraph = ({ purchaseRate }: { purchaseRate: string | null }) => {
       },
       title: {
         display: false,
-        // text: 'Daily Purchases',
       },
     },
     scales: {
