@@ -190,14 +190,14 @@ export default function ProductListsTable({
   return (
     <>
       <div className="w-full">
-        <div className="flex items-center justify-end py-4">
+        <div className="flex items-center justify-end py-4 flex-wrap">
           <Input
             placeholder="Filter By Name..."
             value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
               table.getColumn('title')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm bg-white"
+            className="max-w-sm bg-white mt-1 flex-1 min-w-[100px]"
           />
           <Input
             placeholder="Filter By Price..."
@@ -205,7 +205,7 @@ export default function ProductListsTable({
             onChange={(event) =>
               table.getColumn('price')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm ms-3 bg-white"
+            className="max-w-sm ms-0 mt-1 lg:ms-3 bg-white flex-1 min-w-[100px]"
           />
           <Input
             placeholder="Filter By Category..."
@@ -215,9 +215,11 @@ export default function ProductListsTable({
             onChange={(event) =>
               table.getColumn('category')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm mx-3 bg-white"
+            className="max-w-sm mx-0 mt-1  lg:mx-3 bg-white flex-1 min-w-[100px]"
           />
-          <Button onClick={() => setProductFormModal(true)}>
+          <Button
+            onClick={() => setProductFormModal(true)}
+            className="flex-1 mt-1 min-w-[100px]">
             <CirclePlus></CirclePlus> Add New Product
           </Button>
         </div>

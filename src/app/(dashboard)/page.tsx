@@ -74,10 +74,10 @@ export default function Home() {
   }, [productLoading, orderLoading, products, orders])
 
   return (
-    <div className="w-full p-8 ">
+    <div className=" p-8 ">
       <h1 className="font-bold text-[30px] mb-5">Dashboard Overview</h1>
-      <div className="flex w-full justify-between mb-5">
-        <Card className="gap-0 px-4 flex-1/2">
+      <div className="flex gap-3 flex-wrap mb-5 ">
+        <Card className="gap-0 px-4 flex-1">
           <div className="flex justify-between items-center">
             <h1 className="font-bold text-[20px]">Total Revenue</h1>
             <p>
@@ -90,11 +90,11 @@ export default function Home() {
             {orderLoading || dashboardData.totalRevenue === 0 ? (
               <TailChase size={20}></TailChase>
             ) : (
-              dashboardData.totalRevenue
+              '$' + dashboardData.totalRevenue
             )}
           </h1>
         </Card>
-        <Card className="gap-0 ms-3 px-4 flex-1/2">
+        <Card className="gap-0  px-4 flex-1">
           <div className="flex justify-between items-center">
             <h1 className="font-bold text-[20px]">Total Products</h1>
             <p>
@@ -111,7 +111,7 @@ export default function Home() {
             )}
           </h1>
         </Card>
-        <Card className="gap-0 ms-3 px-4 flex-1/2">
+        <Card className="gap-0  px-4 flex-1">
           <div className="flex justify-between items-center">
             <h1 className="font-bold text-[20px]">Total Orders</h1>
             <p>
@@ -128,7 +128,7 @@ export default function Home() {
             )}
           </h1>
         </Card>
-        <Card className="gap-0 px-4 flex-1/2 ms-3">
+        <Card className="gap-0 px-4 flex-1">
           <div className="flex justify-between items-center">
             <h1 className="font-bold text-[20px]">Total Customers</h1>
             <p>
@@ -146,8 +146,8 @@ export default function Home() {
           </h1>
         </Card>
       </div>
-      <div className="flex justify-between  ">
-        <Card className="w-[850px]   border p-5">
+      <div className="flex flex-col lg:flex-row">
+        <Card className="flex-1 min-w-0 me-0 lg:me-3 border p-5">
           <CardTitle className="font-bold text-[20px] mb-3">
             Monthly Purchase Rate
           </CardTitle>
@@ -156,8 +156,7 @@ export default function Home() {
           </div>
         </Card>
 
-        {/* </div> */}
-        <Card className="w-[330px] h-[510px] p-5 border gap-0">
+        <Card className="mt-3 lg:mt-0 h-[300px] lg:h-[510px] p-5 border gap-0 w-full lg:w-[320px] shrink-0">
           <h1 className="font-bold text-[20px]">Quick Actions</h1>
           <p className="mt-2">Manage your store efficiently.</p>
           <Button className="mt-5">

@@ -6,8 +6,6 @@ const adminCredentials = {
   privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
 }
 
-console.log(adminCredentials)
-
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(adminCredentials),

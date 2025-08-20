@@ -123,7 +123,7 @@ export default function ProductForm({
             <label
               className="flex flex-col justify-center items-center"
               htmlFor="">
-              <input className="mx-5" type="checkbox" name="size" value="M" />
+              <input className="mx-5" type="checkbox" name="size" value="XL" />
               Extra Large
             </label>
           </div>

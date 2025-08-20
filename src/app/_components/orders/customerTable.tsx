@@ -222,14 +222,14 @@ export function CustomerListTable() {
   return (
     <>
       <div className="w-full p-4 rounded-lg ">
-        <div className="flex items-center pb-4">
+        <div className="flex items-center pb-4 flex-wrap">
           <Input
             placeholder="Filter By Emails..."
             value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
               table.getColumn('email')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm bg-white"
+            className="max-w-sm bg-white flex-1 min-w-[100px] mt-1"
           />
           <Input
             placeholder="Filter By Name..."
@@ -237,13 +237,13 @@ export function CustomerListTable() {
             onChange={(event) =>
               table.getColumn('name')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm bg-white ms-3"
+            className="max-w-sm bg-white ms-0 lg:ms-3  flex-1 min-w-[100px] mt-1"
           />
           <Select
             onValueChange={(value) =>
               table.getColumn('status')?.setFilterValue(value || undefined)
             }>
-            <SelectTrigger className="w-[180px] bg-white ms-3">
+            <SelectTrigger className="w-[180px] bg-white ms-0 lg:ms-3  flex-1 min-w-[100px] mt-1">
               <SelectValue placeholder="Filter By Status" />
             </SelectTrigger>
             <SelectContent>

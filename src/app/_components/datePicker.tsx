@@ -30,12 +30,12 @@ export function DatePicker({
         <Button
           variant="outline"
           data-empty={!date}
-          className="data-[empty=true]:text-muted-foreground w-[280px] ms-3 justify-start text-left font-normal">
+          className="data-[empty=true]:text-muted-foreground min-w-[100px] ms-0 lg:ms-3  flex-1 justify-start text-left font-normal mt-1">
           <CalendarIcon />
           {date ? format(date, 'PPP') : <span>Filter By Date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex flex-col w-auto p-0 p-3">
+      <PopoverContent className="flex flex-col w-auto  p-3">
         <Calendar mode="single" selected={date} onSelect={handleSelect} />
         <Button
           onClick={() => {

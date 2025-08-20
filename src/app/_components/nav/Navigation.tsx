@@ -40,18 +40,20 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar className=" text-white">
-      <SidebarContent className="bg-black">
+    <Sidebar>
+      <SidebarContent className="bg-gray-900 text-white">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-white">
-            <h1 className="font-bold text-2xl mt-5">Application</h1>
+          <SidebarGroupLabel>
+            <h1 className="font-bold text-2xl mt-5 text-white">Application</h1>
           </SidebarGroupLabel>
           <SidebarGroupContent className="mt-7">
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem className="py-3" key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url} prefetch>
+                    <Link
+                      href={item.url}
+                      className="flex items-center gap-2 text-white hover:text-gray-300">
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>
