@@ -20,16 +20,8 @@ export default function Home() {
     totalOrders: 0,
     totalRevenue: 0,
   })
-  const {
-    data: products,
-    isLoading: productLoading,
-    error: productError,
-  } = useFetchProducts()
-  const {
-    data: orders,
-    isLoading: orderLoading,
-    error: orderError,
-  } = useFetchOrders()
+  const { data: products, isLoading: productLoading } = useFetchProducts()
+  const { data: orders, isLoading: orderLoading } = useFetchOrders()
 
   useEffect(() => {
     if (!productLoading && !orderLoading) {

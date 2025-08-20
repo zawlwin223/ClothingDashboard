@@ -157,7 +157,7 @@ export default function ProductListsTable({
     },
   ]
 
-  const { data: products = [], isLoading, error } = useFetchProducts()
+  const { data: products = [] } = useFetchProducts()
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])

@@ -182,7 +182,7 @@ export function CustomerListTable() {
       },
     },
   ]
-  const { data, isLoading, isError } = useFetchOrders()
+  const { data } = useFetchOrders()
   const { isPending } = orderDeleteMutation
 
   const arrayFormData = Object.entries(data ?? {}).map(([id, data]) => ({

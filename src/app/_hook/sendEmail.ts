@@ -16,7 +16,6 @@ export function useSendEmail(
         method: 'POST',
         body: JSON.stringify({ name, email, order }),
       })
-      console.log(result)
     },
     onSuccess: () => {
       setOrderConfirmed(id)

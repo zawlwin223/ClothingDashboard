@@ -38,7 +38,7 @@ const PurchaseGraph = ({ purchaseRate }: { purchaseRate: string | null }) => {
     totalPrice: string
   }
 
-  const { data: orders, isLoading, isError } = useFetchOrders()
+  const { data: orders } = useFetchOrders()
 
   Object.values(orders || {}).forEach((order) => {
     const { date, totalPrice } = order as Order
@@ -55,7 +55,6 @@ const PurchaseGraph = ({ purchaseRate }: { purchaseRate: string | null }) => {
     }
   })
 
-  // console.log('Fetched orders:', orders)
   const graphData = {
     labels: purchaseRate === 'Daily Purchase Rate' ? last7Dates : Last7months,
     datasets: [
