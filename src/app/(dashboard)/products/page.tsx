@@ -14,7 +14,7 @@ export default function Products() {
     useState<Product | null>(null)
   return (
     <div className="w-full p-8 mt-2 relative">
-      <Card className="px-9 gap-0">
+      <Card className="px-3 lg:px-9 gap-0">
         <div className="flex justify-between items-center ">
           <h1 className="font-bold  text-[30px]">Product Management</h1>
         </div>

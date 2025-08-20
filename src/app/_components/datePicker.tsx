@@ -30,7 +30,7 @@ export function DatePicker({
         <Button
           variant="outline"
           data-empty={!date}
-          className="data-[empty=true]:text-muted-foreground ms-0 lg:ms-3  flex-1 justify-start text-left font-normal mt-1">
+          className="data-[empty=true]:text-muted-foreground ms-0 lg:ms-3  flex-1 justify-start text-left font-normal mt-3 lg:mt-1 w-full">
           <CalendarIcon />
           {date ? format(date, 'PPP') : <span>Filter By Date</span>}
         </Button>

@@ -14,11 +14,11 @@ export default function PurchaseRate() {
   const [purchaseRate, setPurchaseRate] = useState('Daily Purchase Rate')
   return (
     <div className="p-8 ">
-      <Card className="px-9 py-5 mt-2">
-        <div className="w-full flex justify-between items-center">
+      <Card className="px-3 lg:px-9 py-5 mt-2">
+        <div className="w-full block lg:flex justify-between items-center">
           <h1 className="font-bold  text-[30px] mb-5 ms-3">Purchase Rate</h1>
           <DropdownMenu>
-            <DropdownMenuTrigger className="bg-black text-white w-[250px] px-3 flex items-center justify-around h-[40px] rounded-[5px]">
+            <DropdownMenuTrigger className="bg-black text-white w-full lg:w-[250px] px-3 flex items-center justify-around h-[40px] rounded-[5px]">
               {purchaseRate}
               <ChevronDown className="mt-1"></ChevronDown>
             </DropdownMenuTrigger>
