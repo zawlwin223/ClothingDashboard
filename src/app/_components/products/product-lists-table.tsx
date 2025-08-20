@@ -43,6 +43,12 @@ type ProductListsTableProps = {
   setProductFormModal: (value: boolean) => void
   setEditProductFormModal: (product: Product) => void
 }
+
+type ConfirmModalType = {
+  productId: string | undefined
+  imageId: string
+}
+
 export default function ProductListsTable({
   setProductFormModal,
   setEditProductFormModal,
