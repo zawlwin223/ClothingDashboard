@@ -18,7 +18,7 @@ export default function PurchaseRate() {
         <div className="w-full block lg:flex justify-between items-center">
           <h1 className="font-bold  text-[30px] mb-5 ms-3">Purchase Rate</h1>
           <DropdownMenu>
-            <DropdownMenuTrigger className="bg-black text-white w-full lg:w-[250px] px-3 flex items-center justify-around h-[40px] rounded-[5px]">
+            <DropdownMenuTrigger className="bg-black text-white w-full lg:w-[250px] px-3 flex items-center justify-between h-[40px] rounded-[5px]">
               {purchaseRate}
               <ChevronDown className="mt-1"></ChevronDown>
             </DropdownMenuTrigger>
