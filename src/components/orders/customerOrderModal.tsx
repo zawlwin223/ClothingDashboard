@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { Order } from '@/app/_type/orderType'
-import { useSendEmail } from '@/app/_hook/sendEmail'
+import { Order } from '@/type/orderType'
+import { useSendEmail } from '@/hooks/useSendEmail'
 
 export default function CustomerOrderModal({
   order,

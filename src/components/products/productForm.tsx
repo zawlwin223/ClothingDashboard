@@ -1,11 +1,11 @@
 'use client'
 import ImagePreview from './imagePreview'
 import { useState } from 'react'
-import { useCreateProduct } from '@/app/_hook/productsMutation'
-import { Product } from '@/app/_type/productType'
+import { useCreateProduct } from '@/hooks/useProductsMutation'
+import { Product } from '@/type/productType'
 import { Button } from '@/components/ui/button'
 import { validateForm } from '@/app/_utils/validateForm'
-import { ProductInput } from '@/app/_schema/formValidateSchema'
+import { ProductInput } from '@/schema/formValidateSchema'
 
 interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}
 

@@ -1,5 +1,5 @@
 'use server'
-import { adminFB } from '@/app/_libs/fireBaseAdmin'
+import { adminFB } from '@/lib/fireBaseAdmin'
 
 const adminDb = adminFB.firestore()
 const adminAuth = adminFB.auth()

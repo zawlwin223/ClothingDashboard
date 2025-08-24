@@ -19,13 +19,13 @@ import {
   VisibilityState,
 } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
-import { useFetchOrders } from '@/app/_hook/fetchOrders'
-import { useDeleteOrder } from '@/app/_hook/ordersMutation'
-import { useOrderStatusUpdate } from '@/app/_hook/ordersMutation'
+import { useFetchOrders } from '@/hooks/useFetchOrders'
+import { useDeleteOrder } from '@/hooks/useOrdersMutation'
+import { useOrderStatusUpdate } from '@/hooks/useOrdersMutation'
 
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import CustomerOrderModal from '@/app/_components/orders/customerOrderModal'
+import CustomerOrderModal from './customerOrderModal'
 import Modal from '../modal'
 import { Badge } from '@/components/ui/badge'
 import { DatePicker } from '../datePicker'
@@ -48,7 +48,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { Order } from '@/app/_type/orderType'
+import { Order } from '@/type/orderType'
 
 export function CustomerListTable() {
   const [customerOrderModal, setCustomerOrderModal] = useState<Order | false>(

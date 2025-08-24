@@ -1,5 +1,5 @@
-import { productSchema } from '../_schema/formValidateSchema'
-import { ProductInput } from '../_schema/formValidateSchema'
+import { productSchema } from '../../_schema/formValidateSchema'
+import { ProductInput } from '../../_schema/formValidateSchema'
 
 interface FormState {
   errors: object | boolean

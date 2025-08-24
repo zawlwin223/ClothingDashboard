@@ -10,7 +10,7 @@ import {
   deleteDataFromFB,
   updateDataFromFb,
 } from '../_services/firebase'
-import { Product } from '../_type/productType'
+import { Product } from '../type/productType'
 export async function createProduct(values: Product) {
   const imageResult = await saveImageFile(values?.image as File)
 

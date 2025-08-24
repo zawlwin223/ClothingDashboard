@@ -1,6 +1,6 @@
 'use client'
 import { Bar } from 'react-chartjs-2'
-import { useFetchOrders } from '@/app/_hook/fetchOrders'
+import { useFetchOrders } from '@/hooks/useFetchOrders'
 import { getLast7dates } from '@/app/_utils/getLast7dates'
 import { getLast7months } from '@/app/_utils/getLast7months'
 import { monthNames } from '@/app/_utils/getLast7months'

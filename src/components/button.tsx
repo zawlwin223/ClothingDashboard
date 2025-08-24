@@ -1,6 +1,6 @@
 type ActionType = string
 import { useTransition } from 'react'
-import { deleteProduct } from '../_action/product'
+import { deleteProduct } from '@/action/product'
 import Link from 'next/link'
 
 interface ActionButtonProps {

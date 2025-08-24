@@ -3,9 +3,9 @@
 import { Suspense } from 'react'
 import ProductListsTable from '@/app/_components/products/product-lists-table'
 import { useState } from 'react'
-import Modal from '@/app/_components/modal'
+import Modal from '@/components/modal'
 import ProductForm from '@/app/_components/products/productForm'
-import { Product } from '@/app/_type/productType'
+import { Product } from '@/type/productType'
 import { Card } from '@/components/ui/card'
 
 export default function Products() {

@@ -1,8 +1,8 @@
 'use client'
 import Image from 'next/image'
-import { Product } from '@/app/_type/productType'
-import { useDeleteProduct } from '@/app/_hook/productsMutation'
-import { useFetchProducts } from '@/app/_hook/fetchProducts'
+import { Product } from '@/type/productType'
+import { useDeleteProduct } from '@/hooks/useProductsMutation'
+import { useFetchProducts } from '@/hooks/useFetchProducts'
 import { useState, useEffect } from 'react'
 import {
   ColumnDef,
@@ -37,7 +37,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import Modal from '../modal'
+import Modal from '../../../components/modal'
 
 type ProductListsTableProps = {
   setProductFormModal: (value: boolean) => void
