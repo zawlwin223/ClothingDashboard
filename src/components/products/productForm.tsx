@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useCreateProduct } from '@/hooks/useProductsMutation'
 import { Product } from '@/type/productType'
 import { Button } from '@/components/ui/button'
-import { validateForm } from '@/app/_utils/validateForm'
+import { validateForm } from '@/utils/validateForm'
 import { ProductInput } from '@/schema/formValidateSchema'
 
 interface SubmitEvent extends React.FormEvent<HTMLFormElement> {}

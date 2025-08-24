@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ShoppingCart, Package, DollarSign, Users } from 'lucide-react'
-import PurchaseGraph from '../_components/orders/purchaseGraph'
+import PurchaseGraph from '@/components/orders/purchaseGraph'
 import { Card, CardTitle } from '@/components/ui/card'
 import { useFetchProducts } from '../../hooks/useFetchProducts'
 import { Product } from '../../type/productType'

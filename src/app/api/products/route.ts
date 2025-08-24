@@ -1,9 +1,8 @@
 import type { NextRequest } from 'next/server'
-
-import { fetchDataFromFB } from '@/app/_services/firebase'
-import { deleteProduct } from '@/app/_action/product'
-import { createProduct } from '@/app/_action/product'
-import { updateProduct } from '@/app/_action/product'
+import { fetchDataFromFB } from '@/services/firebase'
+import { deleteProduct } from '@/action/product'
+import { createProduct } from '@/action/product'
+import { updateProduct } from '@/action/product'
 
 export async function GET() {
   try {

@@ -37,7 +37,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import Modal from '../../../components/modal'
+import Modal from '../modal'
 
 type ProductListsTableProps = {
   setProductFormModal: (value: boolean) => void

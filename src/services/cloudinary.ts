@@ -1,5 +1,5 @@
 'use server'
-import cloudinary from '../../lib/cloudinary'
+import cloudinary from '@/lib/cloudinary'
 
 export async function saveImageFile(file: File) {
   const fileBuffer = Buffer.from(await file.arrayBuffer())

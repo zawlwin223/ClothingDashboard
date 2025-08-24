@@ -1,15 +1,11 @@
 'use server'
-import {
-  deleteImage,
-  saveImageFile,
-  updateImage,
-} from '../_services/cloudinary'
+import { deleteImage, saveImageFile, updateImage } from '../services/cloudinary'
 
 import {
   sendDataToFB,
   deleteDataFromFB,
   updateDataFromFb,
-} from '../_services/firebase'
+} from '../services/firebase'
 import { Product } from '../type/productType'
 export async function createProduct(values: Product) {
   const imageResult = await saveImageFile(values?.image as File)

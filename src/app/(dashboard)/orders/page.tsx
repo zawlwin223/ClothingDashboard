@@ -1,4 +1,4 @@
-import { CustomerListTable } from '@/app/_components/orders/customerTable'
+import { CustomerListTable } from '@/components/orders/customerTable'
 import { Card } from '@/components/ui/card'
 
 export default async function Dashboard() {

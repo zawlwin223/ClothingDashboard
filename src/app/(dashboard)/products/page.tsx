@@ -1,10 +1,10 @@
 'use client' // import ProductLists from '../_components/products/product-lists-table'
 // import { Providers } from '../providers'
 import { Suspense } from 'react'
-import ProductListsTable from '@/app/_components/products/product-lists-table'
+import ProductListsTable from '@/components/products/product-lists-table'
 import { useState } from 'react'
 import Modal from '@/components/modal'
-import ProductForm from '@/app/_components/products/productForm'
+import ProductForm from '@/components/products/productForm'
 import { Product } from '@/type/productType'
 import { Card } from '@/components/ui/card'
 
